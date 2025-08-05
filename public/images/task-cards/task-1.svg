@@ -1,0 +1,16 @@
+<svg width="304" height="56" viewBox="0 0 304 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="304" height="56" rx="8" fill="white" stroke="#E5E7EB" stroke-width="1"/>
+  <g transform="translate(16, 16)">
+    <!-- 图标 -->
+    <rect x="0" y="0" width="24" height="24" rx="4" fill="black"/>
+    <text x="12" y="16" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12" font-weight="bold">N</text>
+    
+    <!-- 文本内容 -->
+    <text x="40" y="12" fill="#111827" font-family="Arial, sans-serif" font-size="14" font-weight="600">Next.js Setup</text>
+    <text x="40" y="28" fill="#6B7280" font-family="Arial, sans-serif" font-size="12">Initialize Next.js project with TypeScript</text>
+    
+    <!-- 勾选图标 -->
+    <circle cx="280" cy="12" r="12" fill="#10B981"/>
+    <path d="M275 12 L279 16 L285 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg> 

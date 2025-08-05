@@ -1,4 +1,4 @@
-import RotatingOrbitalAnimation from "@/components/RotatingOrbitalAnimation";
+import RotatingOrbitalAnimation from "@/components/ui/ImageRotating";
 
 export default function AnimationPage() {
   return (

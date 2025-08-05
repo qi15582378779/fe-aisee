@@ -10,14 +10,14 @@ interface OrbitalItem {
      distance?: number; // 轨道距离
  }
 
-interface RotatingOrbitalAnimationProps {
+interface ImageRotatingProps {
      centerImage?: string;
      orbitalItems?: OrbitalItem[];
      orbitalDistance?: number;
      className?: string;
  }
 
-export default function RotatingOrbitalAnimation({
+export default function ImageRotating({
      centerImage = "/images/slider_2/icon10.svg",
      orbitalItems = [
          { id: 1, icon: "/images/slider_2/icon1.svg" },
@@ -32,7 +32,7 @@ export default function RotatingOrbitalAnimation({
      ],
      orbitalDistance = 65,
      className = ""
- }: RotatingOrbitalAnimationProps) {
+ }: ImageRotatingProps) {
     const [animationState, setAnimationState] = useState({
         scale: 1,
         centerScale: 1,

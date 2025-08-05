@@ -1,6 +1,6 @@
 "use client";
 
-import RotatingOrbitalAnimation from "@/components/RotatingOrbitalAnimation";
+import RotatingOrbitalAnimation from "@/components/ui/ImageRotating";
 
 const data: unknown[] = [
     {
