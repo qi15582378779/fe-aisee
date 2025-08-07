@@ -4,7 +4,6 @@ import Image from "next/image";
 import { stackImages, listImages, cardStackImages } from "@/lib/imageConfigs";
 import Stack from "@/components/ui/Stack";
 import { AnimatedList } from "@/components/magicui/animated-list";
-import { CardStack } from "@/components/ui/card-stack";
 import { StackedCards } from "@/components/ui/StackedCards";
 import { useAnimation } from "@/contexts/AnimationContext";
 import { useRef, useEffect, useState } from "react";
@@ -62,12 +61,12 @@ export default function Slider4() {
 
             <div className="grid grid-cols-3 gap-[26px]">
                 {data.map((item, index) => (
-                    <div key={index} style={{ backgroundColor: item.bg }} className="pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:transform hover:-translate-y-4">
+                    <div key={index} style={{ backgroundColor: item.bg }} className="pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:transform hover:-translate-y-4 relative">
                         <p className="text-[36px] leading-[133.333%] tracking-[-1.25px] mb-4">{item.title}</p>
                         <p className="text-[18px] leading-[133.333%]">{item.des}</p>
 
                         {index === 0 && (
-                            <div className="w-full mt-[32px] flex items-center justify-center ">
+                            <div className="w-full mt-[32px] flex items-center justify-center absolute bottom-[64px] left-0">
                                 <Stack //
                                     randomRotation={false}
                                     sensitivity={180}
@@ -79,19 +78,24 @@ export default function Slider4() {
                         )}
 
                         {index === 1 && (
-                            <div className="w-full h-[200px] overflow-hidden mt-[32px] flex justify-center">
+                            <div className="w-full h-[220px] overflow-hidden mt-[32px] flex justify-center absolute bottom-0 left-0">
                                 <AnimatedList delay={2000}>
                                     {listImages.map((item) => (
-                                        <Image key={item.id} src={item.img} alt="list" width={304} height={100} />
+                                        <Image key={item.id} src={item.img} alt="list" width={304} height={100} className="w-[304px]" />
                                     ))}
                                 </AnimatedList>
                             </div>
                         )}
 
                         {index === 2 && (
-                            <div className="w-full h-[200px] overflow-hidden mt-[32px] flex justify-center">
-                                {/* <CardStack /> */}
-                                <StackedCards />
+                            <div className="w-full overflow-hidden my-[32px] flex flex-col items-center justify-center">
+                                <div>
+                                    <Image src="/images/slider_4/005.png" alt="slider_4" width={124} height={57} className="w-[124px] h-[57px] mb-1 ml-5" />
+                                </div>
+
+                                <div className="w-full h-[200px] overflow-hidden">
+                                    <StackedCards />
+                                </div>
                             </div>
                         )}
                     </div>

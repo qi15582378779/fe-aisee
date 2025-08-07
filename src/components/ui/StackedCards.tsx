@@ -1,74 +1,72 @@
 "use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+
 import { cardStackImages } from "@/lib/imageConfigs";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectCards } from "swiper/modules";
+import type { Swiper as SwiperClass } from "swiper/types";
+
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/effect-cards";
 
 export const StackedCards = () => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentIndex((prev) => (prev + 1) % cardStackImages.length);
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    // 每个位置的固定缩放比例
-    const positionScales = [0.8, 0.9, 1.0, 0.7];
-
     return (
-        <div className="relative w-full h-full flex flex-col items-center justify-center perspective-1000">
-            {cardStackImages.map((card, index) => {
-                // 计算当前图片应该使用的缩放比例
-                const currentScale = positionScales[index];
-                const nextScale = positionScales[Math.max(0, index - 1)];
-                
-                return (
-                    <div
-                        key={card.id}
-                        className="h-[56px] mt-[-10px] relative"
-                        style={{
-                            zIndex: index + 1
-                        }}
-                    >
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={`${card.id}-${currentIndex}`}
-                                initial={{ 
-                                    y: index === 0 ? 80 : 50,
-                                    scale: index === 0 ? positionScales[3] : currentScale,
-                                    rotateX: 0,
-                                    opacity: 1
-                                }}
-                                animate={{ 
-                                    y: 0,
-                                    scale: nextScale,
-                                    rotateX: 0,
-                                    opacity: 1
-                                }}
-                                exit={{ 
-                                    y: -30,
-                                    rotateX: index === 0 ? 90 : 0,
-                                    opacity: index === 0 ? 0 : 1
-                                }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 260,
-                                    damping: 50,
-                                    delay: index * 0.05
-                                }}
-                                style={{
-                                    transformStyle: "preserve-3d"
-                                }}
-                            >
-                                <Image src={cardStackImages[(index + currentIndex) % cardStackImages.length].img} alt={cardStackImages[(index + currentIndex) % cardStackImages.length].id.toString()} width={304} height={56} className="!h-[56px]" />
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                );
-            })}
-        </div>
+        <Swiper
+            modules={[EffectCards, Autoplay]}
+            direction="vertical"
+            loop={true}
+            slidesPerView={4}
+            spaceBetween={0}
+            centeredSlides={true}
+            watchSlidesProgress={true}
+            autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+                waitForTransition: true
+            }}
+            onSetTranslate={(swiper: SwiperClass) => {
+                swiper.slides.forEach((slide, index) => {
+                    const el = slide as HTMLElement & { progress: number };
+                    // 使用 Math.round 来获取整数进度，避免小数导致的偏移问题
+                    const progress = Math.round(el.progress);
+                    // console.log(`Slide ${index}: progress = ${progress}`);
+
+                    // 清除之前的样式
+                    // el.style.removeProperty("opacity");
+                    // el.style.removeProperty("transform");
+                    el.style.removeProperty("z-index");
+                    el.style.removeProperty("width");
+
+                    const distance = Math.abs(progress);
+                    // 宽度递减：从300px开始，每个距离减少25px，最小200px
+                    const width = Math.max(200, 300 - distance * 25);
+                    // const opacity = Math.max(0.3, 1 - distance * 0.15);
+                    // 偏移：progress为负值时向上，正值时向下
+                    // const translateY = progress * 20;
+                    const zIndex = 100 - distance;
+
+                    // el.style.setProperty("opacity", opacity.toString(), "important");
+                    // el.style.setProperty("transform", `translate3d(0, -${translateY}px, 0)`, "important");
+                    el.style.setProperty("z-index", zIndex.toString(), "important");
+                    el.style.setProperty("width", `${width}px`, "important");
+                });
+            }}
+            onSetTransition={(swiper, transition) => {
+                // console.log(swiper);
+                for (let i = 0; i < swiper.slides.length; i++) {
+                    const slide = swiper.slides[i];
+                    slide.style.transition = transition.toString();
+                }
+            }}
+            className="w-full h-full "
+        >
+            {cardStackImages.map((card) => (
+                <SwiperSlide key={card.id} className="my-0 mx-auto">
+                    <Image src={card.img} alt={card.id.toString()} width={304} height={56} className="!h-[56px]" />
+                </SwiperSlide>
+            ))}
+        </Swiper>
     );
 };

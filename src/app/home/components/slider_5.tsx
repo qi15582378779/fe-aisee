@@ -41,7 +41,7 @@ function PricingCard({
 
             <div className="flex flex-col gap-[20px]">
                 <div className="flex flex-row items-center justify-between">
-                    <Image src={icon} alt="black" width={50} height={50} />
+                    <Image src={icon} alt="black" width={50} height={50} className="w-[50px] h-[50px]" />
 
                     <div className="flex flex-row gap-0.5 items-center text-[#111111]">
                         <div className="text-[26px] leading-[39px]">{price}</div>
@@ -86,18 +86,18 @@ function PricingCard({
                                 <div className="flex gap-1.5 items-center justify-start">
                                     {feature.isActive ? (
                                         <div className="bg-[#cfff29] flex flex-row items-center justify-center p-[6px] rounded-md shrink-0">
-                                            <Image src="/images/slider_5/icon1.svg" alt="icon" width={12} height={12} />
+                                            <Image src="/images/slider_5/icon1.svg" alt="icon" width={12} height={12} className="w-[12px] h-[12px]" />
                                         </div>
                                     ) : (
                                         <div className={`flex flex-row items-center justify-center p-[6px] rounded-md shrink-0 ${tag ? "bg-[#D1D6E0]" : "bg-[#ecefec]"}`}>
-                                            <Image src="/images/slider_5/icon2.svg" alt="icon" width={12} height={12} />
+                                            <Image src="/images/slider_5/icon2.svg" alt="icon" width={12} height={12} className="w-[12px] h-[12px]" />
                                         </div>
                                     )}
                                     <div className="text-[16px] leading-[24px]">{feature.title}</div>
                                 </div>
 
                                 <div className="flex items-center justify-center">
-                                    <Image src="/images/slider_5/icon3.svg" alt="icon" width={18} height={18} />
+                                    <Image src="/images/slider_5/icon3.svg" alt="icon" width={18} height={18} className="w-[18px] h-[18px]" />
                                 </div>
                             </div>
 
