@@ -14,6 +14,17 @@ export default function Slider1() {
     useEffect(() => {
         if (!wrapperRef.current || !imgRef.current || !textRef.current) return;
 
+        // 检查是否为移动设备
+        const isMobile = window.innerWidth <= 768;
+        
+        // 如果是移动设备，直接返回，不执行GSAP动画
+        if (isMobile) {
+            // 设置移动端的静态样式
+            gsap.set(imgRef.current, { width: "100%" });
+            gsap.set(textRef.current, { opacity: 1, y: 0 });
+            return;
+        }
+
         const wrapper = wrapperRef.current as HTMLElement;
         const wrapperWidth = wrapper.clientWidth;
         const wrapperHeight = wrapper.clientHeight;
@@ -34,7 +45,7 @@ export default function Slider1() {
                     start: "top top",
                     end: endValue,
                     scrub: true,
-                    pin: true,
+                    pin: true
                     // markers: true,
                 }
             });
@@ -47,23 +58,16 @@ export default function Slider1() {
         return () => ctx.revert();
     }, []);
 
-    // useEffect(() => {
-    //     const timeout = setTimeout(() => {
-    //         ScrollTrigger.refresh();
-    //     }, 300);
-    //     return () => clearTimeout(timeout);
-    // }, []);
-
     return (
-        <div ref={wrapperRef} className="w-full min-h-screen relative pt-[70px] flex flex-col justify-end pb-[27px] px-12 z-10">
-            <div className="flex flex-col gap-2 absolute z-2 top-[100px] right-0 px-12">
+        <div ref={wrapperRef} className="w-full min-h-screen relative pt-[70px] flex flex-col justify-end pb-[27px] px-12 z-10 max-md:px-4 max-md:pt-[30px] max-md:pb-[86px]">
+            <div className="flex flex-col gap-2 absolute z-2 top-[100px] right-0 px-12 max-md:px-4">
                 <img src="/images/bg1.svg" alt="slider_1" ref={imgRef} style={{ objectFit: "contain" }} />
                 <p className="text-[#111111] text-[16px] leading-[150%]">Product Demo • Live Analytics</p>
             </div>
 
             <div className="flex flex-col gap-6 text-[#111111] w-[925px] max-w-full" ref={textRef}>
-                <p className="text-[48px] leading-[125%]">Make Your Web3 Project Visible to AI.</p>
-                <p className="text-[68px] leading-[117.647%]">All-in-One AEO Toolkit built for the AI-first internet.</p>
+                <p className="text-[48px] leading-[125%] max-md:text-[20px] max-md:leading-[120%]">Make Your Web3 Project Visible to AI.</p>
+                <p className="text-[68px] leading-[117.647%] max-md:text-[36px] max-md:leading-[133.333%]">All-in-One AEO Toolkit built for the AI-first internet.</p>
             </div>
         </div>
     );

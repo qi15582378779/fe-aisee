@@ -3,7 +3,6 @@
 import FallingText from "@/components/ui/FallingText";
 import RotatingOrbitalAnimation from "@/components/ui/ImageRotating";
 import ScrollingElements from "@/components/ui/ScrollingElements";
-import { AnimatedSwitcher } from "@/components/ui/AnimatedSwitcher";
 import { scrollingElementsImages } from "@/lib/imageConfigs";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
@@ -26,10 +25,11 @@ const customSpanStyles = [
 
 export default function Slider2() {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [activeName, setActiveName] = useState("Analyze");
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const swiperRef = useRef<SwiperRef>(null);
     const fallingTextTriggerRef = useRef<(() => void) | null>(null);
+
+    const [isMobile, setIsMobile] = useState(false);
 
     const data: { name: string; text: string; content?: React.ReactNode }[] = [
         {
@@ -147,94 +147,113 @@ export default function Slider2() {
     }, [activeIndex]);
 
     useEffect(() => {
+        const _isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+        setIsMobile(_isMobile);
+        if (_isMobile) {
+            fallingTextTriggerRef.current?.();
+        }
         return () => {
             cleanup();
         };
     }, []);
 
     return (
-        <div className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-4px px-12 relative z-10">
-            <div className="text-[#111111] min-h-[128px] mb-[112px] grid grid-cols-12 gap-12">
+        <div className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-4px px-12 relative z-10 max-md:px-4 max-md:py-[32px]">
+            <div className="text-[#111111] min-h-[128px] mb-[112px] grid grid-cols-12 gap-12 max-md:grid-cols-1 max-md:mb-[32px]">
                 <p className="text-[20px] leading-[140%] tracking-[0.5px] uppercase col-span-6">AEO Workflow</p>
                 <p className="text-[22.313px] leading-[143.417%] col-span-6">AIsee boosts your Web3 project&apos;s visibility in AI search. Six smart steps. Fully automated. Measurable impact.</p>
             </div>
 
-            <div className="grid grid-cols-12 gap-[132px]">
-                <div className="col-span-4 max-w-full">
-                    <div className="flex flex-col gap-[20px]">
-                        <div className="w-full h-[240px]">
-                            <Swiper
-                                ref={swiperRef}
-                                // install Swiper modules
-                                modules={[EffectCreative, ]}
-                                direction="vertical"
-                                spaceBetween={50}
-                                slidesPerView={1}
-                                loop={true}
-                                // autoplay={{
-                                //     delay: 5000,
-                                //     disableOnInteraction: false
-                                // }}
-                                grabCursor={true}
-                                effect="creative"
-                                creativeEffect={{
-                                    prev: {
-                                        shadow: false /* 禁用阴影避免溢出 */,
-                                        // 大幅度超出容器范围确保完全隐藏
-                                        translate: [0, "-10%", -1000],
-                                        scale: 0.8 /* 缩小上一张进一步确保隐藏 */
-                                    },
-                                    next: {
-                                        translate: [0, "100%", 0]
-                                    }
+            {!isMobile && (
+                <div className="grid grid-cols-12 gap-[132px]">
+                    <div className="col-span-4 max-w-full">
+                        <div className="flex flex-col gap-[20px]">
+                            <div className="w-full h-[240px]">
+                                <Swiper
+                                    ref={swiperRef}
+                                    // install Swiper modules
+                                    modules={[EffectCreative, Autoplay]}
+                                    direction="vertical"
+                                    spaceBetween={50}
+                                    slidesPerView={1}
+                                    loop={true}
+                                    autoplay={{
+                                        delay: 5000,
+                                        disableOnInteraction: false
+                                    }}
+                                    grabCursor={true}
+                                    effect="creative"
+                                    creativeEffect={{
+                                        prev: {
+                                            shadow: false /* 禁用阴影避免溢出 */,
+                                            // 大幅度超出容器范围确保完全隐藏
+                                            translate: [0, "-10%", -1000],
+                                            scale: 0.8 /* 缩小上一张进一步确保隐藏 */
+                                        },
+                                        next: {
+                                            translate: [0, "100%", 0]
+                                        }
+                                    }}
+                                    speed={1000}
+                                    observer={true}
+                                    observeParents={true}
+                                    observeSlideChildren={true}
+                                    setWrapperSize={true}
+                                    onSwiper={(swiper) => {
+                                        console.log(swiper);
+                                    }}
+                                    onSlideChange={(swiper) => {
+                                        console.log("slide change", swiper.realIndex);
+                                        setActiveIndex(swiper.realIndex);
+                                    }}
+                                    className="w-full h-full"
+                                >
+                                    {switcherItems.map((item, index) => (
+                                        <SwiperSlide key={index} className={`w-full h-full backface-hidden transform-gpu will-change-transform will-change-opacity overflow-hidden ${index === 2 ? "swiper-no-swiping" : ""}`}>
+                                            {item.content}
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                            </div>
+                            <p
+                                key={activeIndex}
+                                className="text-[16.734px] text-[#111111] leading-[134.454%] animate-fade-in-out"
+                                style={{
+                                    animation: "fadeInOut 0.5s ease-in-out"
                                 }}
-                                speed={1000}
-                                observer={true}
-                                observeParents={true}
-                                observeSlideChildren={true}
-                                setWrapperSize={true}
-                                onSwiper={(swiper) => {
-                                    console.log(swiper);
-                                }}
-                                onSlideChange={(swiper) => {
-                                    console.log("slide change", swiper.realIndex);
-                                    setActiveIndex(swiper.realIndex);
-                                }}
-                                className="w-full h-full"
                             >
-                                {switcherItems.map((item, index) => (
-                                    <SwiperSlide key={index} className={`w-full h-full backface-hidden transform-gpu will-change-transform will-change-opacity overflow-hidden ${index === 2 ? "swiper-no-swiping" : ""}`}>
-                                        {item.content}
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
+                                {data[activeIndex].text}
+                            </p>
                         </div>
-                        <p
-                            key={activeIndex}
-                            className="text-[16.734px] text-[#111111] leading-[134.454%] animate-fade-in-out"
-                            style={{
-                                animation: "fadeInOut 0.5s ease-in-out"
-                            }}
-                        >
-                            {data[activeIndex].text}
-                        </p>
+                    </div>
+
+                    <div className="col-span-8 flex flex-col">
+                        {data.map((item, index) => (
+                            <div
+                                key={index}
+                                className={`text-[88px] leading-[109.091%] text-[#111111] uppercase opacity-[0.25] hover:opacity-100 transition-opacity duration-300 cursor-pointer overflow-hidden ${activeIndex === index ? "!opacity-100" : ""}`}
+                                onMouseEnter={() => {
+                                    handleIndexChange(index);
+                                }}
+                            >
+                                {item.name}
+                            </div>
+                        ))}
                     </div>
                 </div>
+            )}
 
-                <div className="col-span-8 flex flex-col">
+            {isMobile && (
+                <div className="w-full flex flex-col gap-[32px]">
                     {data.map((item, index) => (
-                        <div
-                            key={index}
-                            className={`text-[88px] leading-[109.091%] text-[#111111] uppercase opacity-[0.25] hover:opacity-100 transition-opacity duration-300 cursor-pointer overflow-hidden ${activeIndex === index ? "!opacity-100" : ""}`}
-                            onMouseEnter={() => {
-                                handleIndexChange(index);
-                            }}
-                        >
-                            {item.name}
+                        <div key={index} className="w-full">
+                            <div className="text-[36px] leading-[150%] text-[#111111] uppercase mb-4">{item.name}</div>
+                            <div className="w-full h-[240px] bg-white rounded-[12px] overflow-hidden relative border border-[#111111] border-solid mb-5">{item.content}</div>
+                            <div className="text-[16px] leading-[134.454%] text-[#111111]">{item.text}</div>
                         </div>
                     ))}
                 </div>
-            </div>
+            )}
         </div>
     );
 }

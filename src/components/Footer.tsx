@@ -63,12 +63,12 @@ const moreData = [
 
 export default function Footer() {
     return (
-        <div className="w-full px-12 pb-10 relative z-10 border-t-[1px] border-[#111111] bg-[rgba(207,255,41,0.50)] text-[#111111] overflow-hidden">
+        <div className="w-full px-12 pb-10 relative z-10 border-t-[1px] border-[#111111] bg-[rgba(207,255,41,0.50)] text-[#111111] overflow-hidden max-md:px-4 max-md:pb-[34px]">
             <div className="w-full h-full absolute top-0 left-0 overflow-hidden">
                 <ImageTrail key={1} items={["/images/footer/001.svg", "/images/footer/002.svg", "/images/footer/003.svg", "/images/footer/004.svg", "/images/footer/005.svg"]} variant={1} imageSize="w-[64px] h-[64px]" />
             </div>
 
-            <div className="py-[32px] text-[86px] leading-[183.721%] mb-[32px]">
+            <div className="py-[32px] text-[86px] leading-[183.721%] mb-[32px] max-md:text-[48px] max-md:leading-[133.333%] max-md:mb-[62px] max-md:min-h-[191px]">
                 <TextType //
                     text={["All-in-One AEO Suite", "All-in-One AEO Suite"]}
                     typingSpeed={100}
@@ -82,8 +82,8 @@ export default function Footer() {
                 />
             </div>
 
-            <div className="flex items-center justify-between">
-                <div className="flex gap-[105px] relative z-[100]">
+            <div className="flex items-center justify-between max-md:flex-col max-md:items-start max-md:gap-[24px]">
+                <div className="flex gap-[105px] relative z-[100] max-md:flex-col max-md:gap-[24px]">
                     {data.map((item) => (
                         <div key={item.name}>
                             <div className="text-[17px] leading-[99.773%] mb-[17px]">{item.name}</div>

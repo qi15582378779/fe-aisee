@@ -37,7 +37,7 @@ function PricingCard({
 }) {
     return (
         <div className={`border border-[#ECEFEC] rounded-[24px] p-[30px] text-[#111111] relative ${tag ? "bg-[#ECEFEC]" : "bg-white"}`}>
-            {tag && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#cfff29] text-[14px] leading-[21px] px-3 py-[6px] rounded-lg w-max max-w-[80%] text-center">{tag}</div>}
+            {tag && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#cfff29] text-[14px] leading-[21px] px-3 py-[6px] rounded-lg w-max max-w-[90%] text-center">{tag}</div>}
 
             <div className="flex flex-col gap-[20px]">
                 <div className="flex flex-row items-center justify-between">
@@ -62,12 +62,11 @@ function PricingCard({
 
             <div className={`h-[1px] w-full border border-dashed my-[24px] ${tag ? "border-[#D1D6E0]" : "border-[#ECEFEC]"}`} />
 
-            {/* <div className={`h-[52px] flex gap-[4.01px] items-center justify-center text-[16px] leading-[24px] rounded-[10px] mb-[24px] cursor-pointer transition-colors ${tag ? "bg-[#111111] text-white" : "bg-[#ecefec] text-[#111111]"} hover:bg-[#d8d8d8]`}>
-                Get Started
-                <Image src="/images/slider_5/icon5.svg" alt="arrow" width={18} height={18} />
-            </div> */}
-
-            <button className={`btn-30 w-full h-[52px] flex items-center justify-center cursor-pointer text-[16px] leading-[24px] rounded-[10px] mb-[24px] transition-all duration-300 ${tag ? "bg-[#111111] text-white before:bg-[#CFFF29] hover:text-[#111111]" : "bg-[#ecefec] text-[#111111] before:bg-[#111111] hover:text-white"}`}>
+            <button
+                className={`btn-30 w-full h-[52px] flex items-center justify-center cursor-pointer text-[16px] leading-[24px] rounded-[10px] mb-[24px] transition-all duration-300 ${
+                    tag ? "bg-[#111111] text-white before:bg-[#CFFF29] hover:text-[#111111]" : "bg-[#ecefec] text-[#111111] before:bg-[#111111] hover:text-white"
+                }`}
+            >
                 <span className="text-container flex items-center justify-center">
                     <span className="text flex items-center justify-center gap-2">
                         Get Started
@@ -174,28 +173,28 @@ export default function Slider5() {
     const visible = isVisible("slider5");
 
     return (
-        <section ref={sectionRef} className="w-full px-12 pt-[32px] pb-[48px] relative z-10">
+        <section ref={sectionRef} className="w-full px-12 pt-[32px] pb-[48px] relative z-10 max-md:px-4 max-md:pt-[12px]">
             <div className="grid grid-cols-2 items-center mb-10">
                 <div></div>
-                <div className="flex gap-[4.3px] items-baseline text-[#111111] text-[35.1px] leading-[80.057%]">
+                <div className="flex gap-[4.3px] items-baseline text-[#111111] text-[35.1px] leading-[80.057%] max-md:text-[16px] max-md:leading-[175.625%] max-md:justify-end max-md:px-[16px]">
                     <span className={`flex w-[7px] h-[7px] rounded-full bg-[#05C92F] transition-all duration-700 ${visible ? "animate-bounce-twice" : "translate-y-10 opacity-0"}`}></span>
                     <span className={`transition-all duration-700 ease-out ${visible ? "translate-x-0 opacity-100" : "translate-x-[70%] opacity-0"}`}>Pricing Page</span>
                 </div>
             </div>
 
-            <div className="text-[#111111] text-[124px] leading-[122.038%] mb-[48px] flex flex-col">
+            <div className="text-[#111111] text-[124px] leading-[122.038%] mb-[48px] flex flex-col max-md:text-[48px] max-md:leading-[150%]">
                 <span>Offer tiered pricing</span>
-                <span className="flex items-center gap-8">
+                <span className="flex items-center gap-8 max-md:gap-3">
                     based on
-                    <div className="flex items-center justify-center border-[2.75px] border-[#111111] rounded-[100%] bg-[#5DD562] w-[98px] h-[76px]">
-                        <Image src="/images/slider_5/1.gif" alt="arrow" width={48} height={48} className="max-w-[80%]" />
+                    <div className="flex items-center justify-center border-[2.75px] border-[#111111] rounded-[100%] bg-[#5DD562] w-[98px] h-[76px] max-md:w-[64px] max-md:h-[48px]">
+                        <Image src="/images/slider_5/1.gif" alt="arrow" width={48} height={48} className="max-w-[80%] max-md:w-[32px] max-md:h-[32px]" />
                     </div>
                 </span>
                 <span>functionality</span>
             </div>
 
             <div className="flex justify-center">
-                <div className="flex border border-[#ECEFEC] rounded-[10px] bg-[#ECEFEC] p-[6px] mb-[40px]">
+                <div className="flex border border-[#ECEFEC] rounded-[10px] bg-[#ECEFEC] p-[6px] mb-[40px] max-md:mb-[24px]">
                     {tabs.map((tab) => (
                         <span key={tab.name} className={`px-[16px] py-[10px] text-[#111111] text-[16px] leading-[150%] rounded-[10px] cursor-pointer transition-all duration-300 ${isTab === tab.name ? "bg-[#CFFF29]" : "bg-[#ECEFEC]"}`} onClick={() => setIsTab(tab.name)}>
                             {tab.label}
@@ -205,7 +204,7 @@ export default function Slider5() {
             </div>
 
             {/* 定价卡片 */}
-            <div className="grid grid-cols-3 gap-5 mb-8">
+            <div className="grid grid-cols-3 gap-5 mb-8 max-md:grid-cols-1 max-md:gap-8">
                 {pricingCards.map((card) => (
                     <PricingCard key={card.name} {...card} />
                 ))}

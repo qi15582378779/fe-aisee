@@ -10,7 +10,7 @@ import Slider3 from "./components/slider_3";
 import Slider4 from "./components/slider_4";
 import Slider5 from "./components/slider_5";
 import Slider6 from "./components/slider_6";
-import Footer from "@/components/Foote";
+import Footer from "@/components/Footer";
 import Tips from "./components/tips";
 
 export default function Home() {

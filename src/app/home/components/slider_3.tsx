@@ -13,7 +13,7 @@ const data = [
     },
     {
         title: "Auto-Optimization",
-        des: "Let AIsee’s agent rewrite and deploy content automatically — no manual editing needed."
+        des: `Let AIsee's agent rewrite and deploy content automatically — no manual editing needed.`
     },
     {
         title: "Performance Analytics",
@@ -23,8 +23,8 @@ const data = [
 
 export default function Slider3() {
     return (
-        <div className="w-full px-12 py-[72px] relative z-10">
-            <div className="grid grid-cols-4 gap-8">
+        <div className="w-full px-12 py-[72px] relative z-10 max-md:px-4 max-md:pt-[64px] max-md:pb-[32px] max-md:mb-[64px]">
+            <div className="grid grid-cols-4 gap-8 max-md:grid-cols-1">
                 {data.map((item, index) => (
                     <div key={index} className="text-[#111111]">
                         {index === 0 && (
