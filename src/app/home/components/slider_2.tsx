@@ -1,30 +1,157 @@
 "use client";
 
+import FallingText from "@/components/ui/FallingText";
 import RotatingOrbitalAnimation from "@/components/ui/ImageRotating";
+import ScrollingElements from "@/components/ui/ScrollingElements";
+import { AnimatedSwitcher } from "@/components/ui/AnimatedSwitcher";
+import { scrollingElementsImages } from "@/lib/imageConfigs";
+import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
 
-const data: unknown[] = [
-    {
-        name: "Analyze"
-    },
-    {
-        name: "Score"
-    },
-    {
-        name: "Recommend"
-    },
-    {
-        name: "Execute"
-    },
-    {
-        name: "Verify"
-    },
-    {
-        name: "Visibility Boost"
-    }
+// Import Swiper React components
+import { Swiper, SwiperSlide, type SwiperRef } from "swiper/react";
+import { Autoplay, EffectCreative } from "swiper/modules";
+
+import "swiper/css/autoplay";
+import "swiper/css/grid";
+import "swiper/css/effect-creative";
+
+const customText = "Web Animation, Roadmap, Tokenomics, Suggests rewrites";
+const customSpanStyles = [
+    { backgroundColor: "#D3F6A9", color: "#1C2128", padding: "15px 32px", borderRadius: "100px" },
+    { backgroundColor: "#000", color: "#FFF", padding: "15px 32px", borderRadius: "100px" },
+    { backgroundColor: "#4353FF", color: "#FFF", padding: "15px 32px", borderRadius: "100px" },
+    { backgroundColor: "#FCEA5A", color: "#1C2128", padding: "15px 32px", borderRadius: "100px" }
 ];
 
-
 export default function Slider2() {
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeName, setActiveName] = useState("Analyze");
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const swiperRef = useRef<SwiperRef>(null);
+    const fallingTextTriggerRef = useRef<(() => void) | null>(null);
+
+    const data: { name: string; text: string; content?: React.ReactNode }[] = [
+        {
+            name: "Analyze",
+            text: "AIsee crawls your project's website, Docs, Mirror posts, and Twitter threads to extract structured information. It identifies key modules like FAQs, Tokenomics, Roadmap, and Team intro, while simulating how ChatGPT or Perplexity perceives your content.",
+            content: <RotatingOrbitalAnimation />
+        },
+        {
+            name: "Score",
+            text: "Your content is scored across multiple factors — semantic clarity, structure completeness, keyword coverage, and schema compliance. You'll receive a visual report and benchmarking against industry standards to see where your visibility gaps lie.",
+            content: (
+                <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+                    <video src="/images/slider_2/001.mp4" className="max-w-[60%] object-cover" autoPlay muted loop />
+                    <Image src="/images/slider_2/line.svg" alt="002" className="max-w-[60%] object-cover mt-[-4px]" width={428} height={5.6} priority />
+                </div>
+            )
+        },
+        {
+            name: "Recommend",
+            text: "Based on your AEO score, AIsee generates a tailored list of improvements. It identifies missing fields, suggests rewrites for better AI understanding, and offers prompt-ready content tailored for ChatGPT, Claude, and similar engines.",
+            content: (
+                <FallingText
+                    text={customText}
+                    separator=","
+                    spanStyles={customSpanStyles}
+                    trigger="manual"
+                    gravity={0.8}
+                    fontSize="16px"
+                    onRef={(trigger) => {
+                        fallingTextTriggerRef.current = trigger;
+                    }}
+                />
+            )
+        },
+        {
+            name: "Execute",
+            text: "No need for manual edits. Our agent automatically rewrites, restructures, and deploys content updates to your GitHub, Notion, Docs site, or CMS — with optional approval from you before publishing.",
+            content: (
+                <ScrollingElements //
+                    className="w-[60%] mx-auto"
+                    elements={
+                        //
+                        scrollingElementsImages.map((item) => (
+                            <Image //
+                                key={item.id}
+                                src={item.img}
+                                alt={item.id.toString()}
+                                className="w-[115px] h-[32px] object-contain"
+                                width={115}
+                                height={32}
+                            />
+                        ))
+                    }
+                    containerHeight={240}
+                    itemHeight={32}
+                    gap={50}
+                    xOffset={150}
+                    duration={20}
+                />
+            )
+        },
+        {
+            name: "Verify",
+            text: "After publishing, AIsee rechecks your AI visibility — comparing search engine responses, citation frequency, keyword reach, and coverage improvements. A before/after report helps you measure what changed and where.",
+            content: <Image src="/images/slider_2/5539.png" alt="5539" className="w-[428px] h-full object-cover max-w-[90%] mx-auto" width={428} height={240} priority />
+        },
+        {
+            name: "Visibility Boost",
+            text: "With cleaner structure and AI-friendly content, your project is more likely to be seen, quoted, and recommended in ChatGPT, Perplexity, and beyond — bringing more organic exposure from users, devs, and investors.",
+            content: <Image src="/images/slider_2/5540.png" alt="5540" className="w-[428px] h-full object-cover max-w-[90%] mx-auto" width={428} height={240} priority />
+        }
+    ];
+
+    // 防抖的切换函数
+    const handleIndexChange = (index: number) => {
+        if (activeIndex === index) return;
+
+        console.log(index);
+
+        // 清除之前的定时器
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+
+        // 设置新的定时器，延迟切换
+        timeoutRef.current = setTimeout(() => {
+            setActiveIndex(index);
+            // 切换到对应的 Swiper slide
+            if (swiperRef.current?.swiper) {
+                swiperRef.current.swiper.slideTo(index);
+            }
+        }, 50); // 50ms 的防抖延迟
+    };
+
+    // 准备 AnimatedSwitcher 的数据
+    const switcherItems = data.map((item, index) => ({
+        id: index,
+        content: <div className="w-full h-full bg-white rounded-[12px] overflow-hidden relative border border-[#111111] border-solid">{item.content}</div>
+    }));
+
+    // 清理定时器
+    const cleanup = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+    };
+
+    // 监听 activeIndex 变化，触发 FallingText 动画
+    useEffect(() => {
+        if (activeIndex === 2 && fallingTextTriggerRef.current) {
+            setTimeout(() => {
+                fallingTextTriggerRef.current?.();
+            }, 100);
+        }
+    }, [activeIndex]);
+
+    useEffect(() => {
+        return () => {
+            cleanup();
+        };
+    }, []);
+
     return (
         <div className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-4px px-12 relative z-10">
             <div className="text-[#111111] min-h-[128px] mb-[112px] grid grid-cols-12 gap-12">
@@ -34,17 +161,76 @@ export default function Slider2() {
 
             <div className="grid grid-cols-12 gap-[132px]">
                 <div className="col-span-4 max-w-full">
-                    <div className="w-full h-[240px] rounded-[12px] overflow-hidden relative  border border-[#111111] border-solid mb-[20px]">
-                        <RotatingOrbitalAnimation />
+                    <div className="flex flex-col gap-[20px]">
+                        <div className="w-full h-[240px]">
+                            <Swiper
+                                ref={swiperRef}
+                                // install Swiper modules
+                                modules={[EffectCreative, ]}
+                                direction="vertical"
+                                spaceBetween={50}
+                                slidesPerView={1}
+                                loop={true}
+                                // autoplay={{
+                                //     delay: 5000,
+                                //     disableOnInteraction: false
+                                // }}
+                                grabCursor={true}
+                                effect="creative"
+                                creativeEffect={{
+                                    prev: {
+                                        shadow: false /* 禁用阴影避免溢出 */,
+                                        // 大幅度超出容器范围确保完全隐藏
+                                        translate: [0, "-10%", -1000],
+                                        scale: 0.8 /* 缩小上一张进一步确保隐藏 */
+                                    },
+                                    next: {
+                                        translate: [0, "100%", 0]
+                                    }
+                                }}
+                                speed={1000}
+                                observer={true}
+                                observeParents={true}
+                                observeSlideChildren={true}
+                                setWrapperSize={true}
+                                onSwiper={(swiper) => {
+                                    console.log(swiper);
+                                }}
+                                onSlideChange={(swiper) => {
+                                    console.log("slide change", swiper.realIndex);
+                                    setActiveIndex(swiper.realIndex);
+                                }}
+                                className="w-full h-full"
+                            >
+                                {switcherItems.map((item, index) => (
+                                    <SwiperSlide key={index} className={`w-full h-full backface-hidden transform-gpu will-change-transform will-change-opacity overflow-hidden ${index === 2 ? "swiper-no-swiping" : ""}`}>
+                                        {item.content}
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
+                        </div>
+                        <p
+                            key={activeIndex}
+                            className="text-[16.734px] text-[#111111] leading-[134.454%] animate-fade-in-out"
+                            style={{
+                                animation: "fadeInOut 0.5s ease-in-out"
+                            }}
+                        >
+                            {data[activeIndex].text}
+                        </p>
                     </div>
-
-                    <p>AIsee crawls your project&apos;s website, Docs, Mirror posts, and Twitter threads to extract structured information. It identifies key modules like FAQs, Tokenomics, Roadmap, and Team intro, while simulating how ChatGPT or Perplexity perceives your content.</p>
                 </div>
 
                 <div className="col-span-8 flex flex-col">
-                    {["Analyze", "Score", "Recommend", "Execute", "Verify", "Visibility Boost"].map((item, index) => (
-                        <div key={index} className="text-[88px] leading-[109.091%] text-[#111111] uppercase opacity-[0.25] hover:opacity-100 transition-opacity duration-300">
-                            {item}
+                    {data.map((item, index) => (
+                        <div
+                            key={index}
+                            className={`text-[88px] leading-[109.091%] text-[#111111] uppercase opacity-[0.25] hover:opacity-100 transition-opacity duration-300 cursor-pointer overflow-hidden ${activeIndex === index ? "!opacity-100" : ""}`}
+                            onMouseEnter={() => {
+                                handleIndexChange(index);
+                            }}
+                        >
+                            {item.name}
                         </div>
                     ))}
                 </div>

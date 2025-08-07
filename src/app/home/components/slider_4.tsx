@@ -6,6 +6,8 @@ import Stack from "@/components/ui/Stack";
 import { AnimatedList } from "@/components/magicui/animated-list";
 import { CardStack } from "@/components/ui/card-stack";
 import { StackedCards } from "@/components/ui/StackedCards";
+import { useAnimation } from "@/contexts/AnimationContext";
+import { useRef, useEffect, useState } from "react";
 
 const data = [
     {
@@ -26,13 +28,24 @@ const data = [
 ];
 
 export default function Slider4() {
+    const { registerAnimation, isVisible, setRef } = useAnimation();
+
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        registerAnimation("slider4", false);
+        setRef("slider4", sectionRef);
+    }, []);
+
+    const visible = isVisible("slider4");
+
     return (
-        <div className="w-full px-12 pb-[72px] relative z-10">
+        <section ref={sectionRef} className="w-full px-12 pb-[72px] relative z-10">
             <div className="grid grid-cols-2 items-center mb-10">
                 <div></div>
                 <div className="flex gap-[4.3px] items-baseline text-[#111111] text-[35.1px] leading-[80.057%]">
-                    <span className="flex w-[7px] h-[7px] rounded-full bg-[#FF5A4D]"></span>
-                    Features Page
+                    <span className={`flex w-[7px] h-[7px] rounded-full bg-[#FF5A4D] transition-all duration-700 ${visible ? "animate-bounce-twice" : "translate-y-10 opacity-0"}`}></span>
+                    <span className={`transition-all duration-700 ease-out ${visible ? "translate-x-0 opacity-100" : "translate-x-[50%] opacity-0"}`}>Features Page</span>
                 </div>
             </div>
 
@@ -49,12 +62,12 @@ export default function Slider4() {
 
             <div className="grid grid-cols-3 gap-[26px]">
                 {data.map((item, index) => (
-                    <div key={index} style={{ backgroundColor: item.bg }} className="pt-8 px-6 rounded-[24px] text-[#111111]">
+                    <div key={index} style={{ backgroundColor: item.bg }} className="pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:transform hover:-translate-y-4">
                         <p className="text-[36px] leading-[133.333%] tracking-[-1.25px] mb-4">{item.title}</p>
                         <p className="text-[18px] leading-[133.333%]">{item.des}</p>
 
                         {index === 0 && (
-                            <div className="w-full mt-[32px] flex items-center justify-center hover:-translate-y-1.5 transition-all duration-300">
+                            <div className="w-full mt-[32px] flex items-center justify-center ">
                                 <Stack //
                                     randomRotation={false}
                                     sensitivity={180}
@@ -84,6 +97,6 @@ export default function Slider4() {
                     </div>
                 ))}
             </div>
-        </div>
+        </section>
     );
 }

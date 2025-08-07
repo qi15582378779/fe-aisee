@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import localFont from "next/font/local";
+
+//
+import "swiper/css";
+import "./globals.css";
 
 const gotu = localFont({
     src: "./fonts/Gotu-Regular.ttf",

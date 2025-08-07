@@ -64,3 +64,18 @@ export const cardStackImages = [
     { id: 3, img: "/images/slider_4/5534.png", width: 280 },
     { id: 4, img: "/images/slider_4/5535.png", width: 204 }
 ];
+
+export const scrollingElementsImages = [
+    { id: 1, img: "/images/slider_2/5534.png" },
+    { id: 2, img: "/images/slider_2/5535.png" },
+    { id: 3, img: "/images/slider_2/5536.png" },
+    { id: 4, img: "/images/slider_2/5537.png" },
+
+    { id: 5, img: "/images/slider_2/5534.png" },
+    { id: 6, img: "/images/slider_2/5535.png" },
+    { id: 7, img: "/images/slider_2/5536.png" },
+    { id: 8, img: "/images/slider_2/5537.png" },
+
+    { id: 9, img: "/images/slider_2/5534.png" },
+    { id: 10, img: "/images/slider_2/5535.png" }
+];

@@ -16,7 +16,11 @@ export default function Slider1() {
 
         const wrapper = wrapperRef.current as HTMLElement;
         const wrapperWidth = wrapper.clientWidth;
+        const wrapperHeight = wrapper.clientHeight;
         const initialWidth = 383.98;
+        const endValue = wrapperHeight >= 2000 ? "bottom top" : `+=3000`;
+
+        console.log(wrapperHeight, endValue);
 
         const ctx = gsap.context(() => {
             // 设置初始宽度和透明度
@@ -28,9 +32,9 @@ export default function Slider1() {
                 scrollTrigger: {
                     trigger: wrapper,
                     start: "top top",
-                    end: "bottom top",
+                    end: endValue,
                     scrub: true,
-                    pin: true
+                    pin: true,
                     // markers: true,
                 }
             });
@@ -42,6 +46,13 @@ export default function Slider1() {
 
         return () => ctx.revert();
     }, []);
+
+    // useEffect(() => {
+    //     const timeout = setTimeout(() => {
+    //         ScrollTrigger.refresh();
+    //     }, 300);
+    //     return () => clearTimeout(timeout);
+    // }, []);
 
     return (
         <div ref={wrapperRef} className="w-full min-h-screen relative pt-[70px] flex flex-col justify-end pb-[27px] px-12 z-10">

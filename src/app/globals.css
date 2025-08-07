@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./styles/index.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -21,6 +22,10 @@
     background: #555;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 /* 平滑滚动 */
 html {
     scroll-behavior: smooth;
@@ -36,20 +41,6 @@ body {
 /* 图片背景样式优化 */
 .bg-size-\[100\%_111\.12\%\] {
     background-size: 100% 111.12%;
-}
-
-/* 无缝滚动动画 - 4个图片版本 */
-@keyframes scroll-left {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-.animate-scroll-left {
-    animation: scroll-left 20s linear infinite;
 }
 
 @theme inline {
@@ -160,10 +151,10 @@ body {
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
 }

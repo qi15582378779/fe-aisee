@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useAnimation } from "@/contexts/AnimationContext";
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import ArrowRight from "@/icons/arrowRight";
 
 const tabs = [
     {
@@ -34,7 +36,7 @@ function PricingCard({
     tag?: string;
 }) {
     return (
-        <div className={`border border-[#ECEFEC] rounded-[24px] p-[30px] text-[#111111] relative ${tag ? "bg-[#ECEFEC]" :                                                       "bg-white"}`}>
+        <div className={`border border-[#ECEFEC] rounded-[24px] p-[30px] text-[#111111] relative ${tag ? "bg-[#ECEFEC]" : "bg-white"}`}>
             {tag && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#cfff29] text-[14px] leading-[21px] px-3 py-[6px] rounded-lg w-max max-w-[80%] text-center">{tag}</div>}
 
             <div className="flex flex-col gap-[20px]">
@@ -60,10 +62,19 @@ function PricingCard({
 
             <div className={`h-[1px] w-full border border-dashed my-[24px] ${tag ? "border-[#D1D6E0]" : "border-[#ECEFEC]"}`} />
 
-            <div className={`h-[52px] flex gap-[4.01px] items-center justify-center text-[16px] leading-[24px] rounded-[10px] mb-[24px] cursor-pointer transition-colors ${tag ? "bg-[#111111] text-white" : "bg-[#ecefec] text-[#111111]"} hover:bg-[#d8d8d8]`}>
+            {/* <div className={`h-[52px] flex gap-[4.01px] items-center justify-center text-[16px] leading-[24px] rounded-[10px] mb-[24px] cursor-pointer transition-colors ${tag ? "bg-[#111111] text-white" : "bg-[#ecefec] text-[#111111]"} hover:bg-[#d8d8d8]`}>
                 Get Started
                 <Image src="/images/slider_5/icon5.svg" alt="arrow" width={18} height={18} />
-            </div>
+            </div> */}
+
+            <button className={`btn-30 w-full h-[52px] flex items-center justify-center cursor-pointer text-[16px] leading-[24px] rounded-[10px] mb-[24px] transition-all duration-300 ${tag ? "bg-[#111111] text-white before:bg-[#CFFF29] hover:text-[#111111]" : "bg-[#ecefec] text-[#111111] before:bg-[#111111] hover:text-white"}`}>
+                <span className="text-container flex items-center justify-center">
+                    <span className="text flex items-center justify-center gap-2">
+                        Get Started
+                        <ArrowRight />
+                    </span>
+                </span>
+            </button>
 
             <div className="flex flex-col gap-4 items-start justify-start">
                 <div className="text-[16px] leading-[24px]">Features Included:</div>
@@ -149,15 +160,26 @@ const pricingCards = [
 ];
 
 export default function Slider5() {
-    const [isTab, setIsTab] = useState("M");
+    const [isTab, setIsTab] = useState("Y");
+
+    const { registerAnimation, isVisible, setRef } = useAnimation();
+
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        registerAnimation("slider5", false);
+        setRef("slider5", sectionRef);
+    }, []);
+
+    const visible = isVisible("slider5");
 
     return (
-        <div className="w-full px-12 pt-[32px] pb-[48px] relative z-10">
+        <section ref={sectionRef} className="w-full px-12 pt-[32px] pb-[48px] relative z-10">
             <div className="grid grid-cols-2 items-center mb-10">
                 <div></div>
                 <div className="flex gap-[4.3px] items-baseline text-[#111111] text-[35.1px] leading-[80.057%]">
-                    <span className="flex w-[7px] h-[7px] rounded-full bg-[#05C92F]"></span>
-                    Pricing Page
+                    <span className={`flex w-[7px] h-[7px] rounded-full bg-[#05C92F] transition-all duration-700 ${visible ? "animate-bounce-twice" : "translate-y-10 opacity-0"}`}></span>
+                    <span className={`transition-all duration-700 ease-out ${visible ? "translate-x-0 opacity-100" : "translate-x-[70%] opacity-0"}`}>Pricing Page</span>
                 </div>
             </div>
 
@@ -188,6 +210,6 @@ export default function Slider5() {
                     <PricingCard key={card.name} {...card} />
                 ))}
             </div>
-        </div>
+        </section>
     );
 }

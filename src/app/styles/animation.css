@@ -1,0 +1,67 @@
+/* 无缝滚动动画 - 4个图片版本 */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.animate-scroll-left {
+    animation: scroll-left 20s linear infinite;
+}
+
+
+/* 淡入淡出动画 */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-out {
+    animation: fadeInOut 0.5s ease-in-out;
+}
+
+/* 自定义弹跳动画 - 弹跳两次 */
+@keyframes bounce-twice {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-12px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.animate-bounce-twice {
+    animation: bounce-twice 0.8s ease-in-out;
+}
+
+/* 轻微上下浮动动画 */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
