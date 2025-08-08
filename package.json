@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:subpath": "./scripts/build.sh subpath",
+    "build:root": "./scripts/build.sh root",
     "start": "next start",
     "lint": "next lint"
   },
