@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import Matter from "matter-js";
 
 interface FallingTextProps {
@@ -102,7 +102,7 @@ const FallingText: React.FC<FallingTextProps> = ({
         if (onRef) {
             onRef(() => {
                 setEffectStarted(false);
-                setResetKey(prev => prev + 1);
+                setResetKey((prev) => prev + 1);
                 setTimeout(() => {
                     setEffectStarted(true);
                 }, 50);
@@ -110,115 +110,179 @@ const FallingText: React.FC<FallingTextProps> = ({
         }
     }, [onRef]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!effectStarted) return;
 
         const { Engine, Render, World, Bodies, Runner, Mouse, MouseConstraint } = Matter;
 
         if (!containerRef.current || !canvasContainerRef.current) return;
 
-        const containerRect = containerRef.current.getBoundingClientRect();
-        const width = containerRect.width;
-        const height = containerRect.height;
+        // 添加延迟确保容器尺寸稳定
+        const initPhysics = () => {
+            setTimeout(() => {
+                if (!containerRef.current) return;
 
-        if (width <= 0 || height <= 0) return;
+                const width = containerRef.current.scrollWidth;
+                const height = containerRef.current.scrollHeight;
 
-        const engine = Engine.create();
-        engine.world.gravity.y = gravity;
+                console.log("containerRef", containerRef.current);
+                console.log("width", width, "height", height);
 
-        const render = Render.create({
-            element: canvasContainerRef.current,
-            engine,
-            options: {
-                width,
-                height,
-                background: backgroundColor,
-                wireframes
-            }
-        });
+                if (width <= 0 || height <= 0) return;
 
-        const boundaryOptions = {
-            isStatic: true,
-            render: { fillStyle: "transparent" }
+                const engine = Engine.create();
+                engine.world.gravity.y = gravity;
+
+                // 确保 canvas 容器有正确的尺寸，并清理旧的 canvas
+                if (canvasContainerRef.current) {
+                    canvasContainerRef.current.style.width = `${width}px`;
+                    canvasContainerRef.current.style.height = `${height}px`;
+
+                    // 清理所有已存在的 canvas
+                    const existingCanvases = canvasContainerRef.current.querySelectorAll("canvas");
+                    existingCanvases.forEach((canvas) => {
+                        canvasContainerRef.current!.removeChild(canvas);
+                    });
+                }
+
+                const render = Render.create({
+                    element: canvasContainerRef.current!,
+                    engine,
+                    options: {
+                        width,
+                        height,
+                        background: backgroundColor,
+                        wireframes
+                    }
+                });
+
+                const boundaryOptions = {
+                    isStatic: true,
+                    render: { fillStyle: "transparent" }
+                };
+                // 修复地板位置，确保在容器底部
+                const floor = Bodies.rectangle(width / 2, height - 10, width, 20, boundaryOptions);
+                const leftWall = Bodies.rectangle(-10, height / 2, 20, height, boundaryOptions);
+                const rightWall = Bodies.rectangle(width + 10, height / 2, 20, height, boundaryOptions);
+                const ceiling = Bodies.rectangle(width / 2, -10, width, 20, boundaryOptions);
+
+                if (!textRef.current) return;
+                const wordSpans = textRef.current.querySelectorAll("span");
+                const wordBodies = [...wordSpans].map((elem) => {
+                    const rect = elem.getBoundingClientRect();
+                    const containerRect = containerRef.current!.getBoundingClientRect();
+
+                    const x = rect.left - containerRect.left + rect.width / 2;
+                    const y = rect.top - containerRect.top + rect.height / 2;
+
+                    const body = Bodies.rectangle(x, y, rect.width, rect.height, {
+                        render: { fillStyle: "transparent" },
+                        restitution: 0.3, // 降低弹性，让元素更容易停在底部
+                        frictionAir: 0.005, // 减少空气阻力
+                        friction: 0.1 // 减少摩擦力
+                    });
+                    Matter.Body.setVelocity(body, {
+                        x: (Math.random() - 0.5) * 5,
+                        y: 0
+                    });
+                    Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.05);
+
+                    return { elem, body };
+                });
+
+                wordBodies.forEach(({ elem, body }) => {
+                    elem.style.position = "absolute";
+                    elem.style.left = `${body.position.x - body.bounds.max.x + body.bounds.min.x / 2}px`;
+                    elem.style.top = `${body.position.y - body.bounds.max.y + body.bounds.min.y / 2}px`;
+                    elem.style.transform = "none";
+                });
+
+                const mouse = Mouse.create(containerRef.current!);
+                const mouseConstraint = MouseConstraint.create(engine, {
+                    mouse,
+                    constraint: {
+                        stiffness: mouseConstraintStiffness,
+                        render: { visible: false }
+                    }
+                });
+                render.mouse = mouse;
+
+                World.add(engine.world, [floor, leftWall, rightWall, ceiling, mouseConstraint, ...wordBodies.map((wb) => wb.body)]);
+
+                const runner = Runner.create();
+                Runner.run(runner, engine);
+                Render.run(render);
+
+                // 监听窗口大小变化，重新调整 canvas 尺寸
+                const handleResize = () => {
+                    if (containerRef.current && canvasContainerRef.current) {
+                        const newWidth = containerRef.current.scrollWidth;
+                        const newHeight = containerRef.current.scrollHeight;
+
+                        if (newWidth > 0 && newHeight > 0) {
+                            canvasContainerRef.current.style.width = `${newWidth}px`;
+                            canvasContainerRef.current.style.height = `${newHeight}px`;
+                            render.canvas.width = newWidth;
+                            render.canvas.height = newHeight;
+                            render.options.width = newWidth;
+                            render.options.height = newHeight;
+                        }
+                    }
+                };
+
+                window.addEventListener("resize", handleResize);
+
+                const updateLoop = () => {
+                    wordBodies.forEach(({ body, elem }) => {
+                        const { x, y } = body.position;
+                        // 确保元素不会超出容器边界
+                        const clampedX = Math.max(0, Math.min(x, width));
+                        const clampedY = Math.max(0, Math.min(y, height - 5)); // 留出一些空间给地板
+
+                        elem.style.left = `${clampedX}px`;
+                        elem.style.top = `${clampedY}px`;
+                        elem.style.transform = `translate(-50%, -50%) rotate(${body.angle}rad)`;
+                    });
+                    Matter.Engine.update(engine);
+                    requestAnimationFrame(updateLoop);
+                };
+                updateLoop();
+
+                return () => {
+                    window.removeEventListener("resize", handleResize);
+                    Render.stop(render);
+                    Runner.stop(runner);
+                    // 清理所有 canvas
+                    if (canvasContainerRef.current) {
+                        const existingCanvases = canvasContainerRef.current.querySelectorAll("canvas");
+                        existingCanvases.forEach((canvas) => {
+                            canvasContainerRef.current!.removeChild(canvas);
+                        });
+                    }
+                    World.clear(engine.world, false);
+                    Engine.clear(engine);
+                };
+            }, 100);
         };
-        const floor = Bodies.rectangle(width / 2, height + 25, width, 50, boundaryOptions);
-        const leftWall = Bodies.rectangle(-25, height / 2, 50, height, boundaryOptions);
-        const rightWall = Bodies.rectangle(width + 25, height / 2, 50, height, boundaryOptions);
-        const ceiling = Bodies.rectangle(width / 2, -25, width, 50, boundaryOptions);
 
-        if (!textRef.current) return;
-        const wordSpans = textRef.current.querySelectorAll("span");
-        const wordBodies = [...wordSpans].map((elem) => {
-            const rect = elem.getBoundingClientRect();
-
-            const x = rect.left - containerRect.left + rect.width / 2;
-            const y = rect.top - containerRect.top + rect.height / 2;
-
-            const body = Bodies.rectangle(x, y, rect.width, rect.height, {
-                render: { fillStyle: "transparent" },
-                restitution: 0.8,
-                frictionAir: 0.01,
-                friction: 0.2
-            });
-            Matter.Body.setVelocity(body, {
-                x: (Math.random() - 0.5) * 5,
-                y: 0
-            });
-            Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.05);
-
-            return { elem, body };
-        });
-
-        wordBodies.forEach(({ elem, body }) => {
-            elem.style.position = "absolute";
-            elem.style.left = `${body.position.x - body.bounds.max.x + body.bounds.min.x / 2}px`;
-            elem.style.top = `${body.position.y - body.bounds.max.y + body.bounds.min.y / 2}px`;
-            elem.style.transform = "none";
-        });
-
-        const mouse = Mouse.create(containerRef.current);
-        const mouseConstraint = MouseConstraint.create(engine, {
-            mouse,
-            constraint: {
-                stiffness: mouseConstraintStiffness,
-                render: { visible: false }
-            }
-        });
-        render.mouse = mouse;
-
-        World.add(engine.world, [floor, leftWall, rightWall, ceiling, mouseConstraint, ...wordBodies.map((wb) => wb.body)]);
-
-        const runner = Runner.create();
-        Runner.run(runner, engine);
-        Render.run(render);
-
-        const updateLoop = () => {
-            wordBodies.forEach(({ body, elem }) => {
-                const { x, y } = body.position;
-                elem.style.left = `${x}px`;
-                elem.style.top = `${y}px`;
-                elem.style.transform = `translate(-50%, -50%) rotate(${body.angle}rad)`;
-            });
-            Matter.Engine.update(engine);
-            requestAnimationFrame(updateLoop);
-        };
-        updateLoop();
+        // 延迟执行，确保容器尺寸稳定
+        initPhysics();
 
         return () => {
-            Render.stop(render);
-            Runner.stop(runner);
-            if (render.canvas && canvasContainerRef.current) {
-                canvasContainerRef.current.removeChild(render.canvas);
+            // 清理可能存在的旧 canvas
+            if (canvasContainerRef.current) {
+                const existingCanvas = canvasContainerRef.current.querySelector("canvas");
+                if (existingCanvas) {
+                    canvasContainerRef.current.removeChild(existingCanvas);
+                }
             }
-            World.clear(engine.world, false);
-            Engine.clear(engine);
         };
     }, [effectStarted, gravity, wireframes, backgroundColor, mouseConstraintStiffness, resetKey]);
 
     const handleTrigger = () => {
         if (trigger === "click" || trigger === "hover") {
             setEffectStarted(false);
-            setResetKey(prev => prev + 1);
+            setResetKey((prev) => prev + 1);
             setTimeout(() => {
                 setEffectStarted(true);
             }, 50);
@@ -226,16 +290,16 @@ const FallingText: React.FC<FallingTextProps> = ({
     };
 
     return (
-        <div ref={containerRef} className="relative z-[1] w-full h-full cursor-pointer text-center overflow-hidden" onClick={trigger === "click" ? handleTrigger : undefined} onMouseEnter={trigger === "hover" ? handleTrigger : undefined}>
+        <div ref={containerRef} className="relative z-[1] w-full h-full cursor-pointer text-center overflow-hidden min-h-[200px]" onClick={trigger === "click" ? handleTrigger : undefined} onMouseEnter={trigger === "hover" ? handleTrigger : undefined}>
             <div
                 ref={textRef}
-                className="block text-[16px]"
+                className="block text-[16px] w-full h-full"
                 style={{
                     fontSize
                 }}
             />
 
-            <div className="absolute top-0 left-0 z-0" ref={canvasContainerRef} />
+            <div className="absolute w-full h-full top-0 left-0 z-0" ref={canvasContainerRef} />
         </div>
     );
 };

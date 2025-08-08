@@ -49,7 +49,7 @@ export default function Slider4() {
             </div>
 
             <div className="flex flex-col justify-center items-center text-[#111111] text-[84.3px] leading-[108.327%] mb-[48px] max-md:text-[48px] max-md:leading-[150%]">
-                <div className={`flex items-center gap-6 max-md:gap-2 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>
+                <div className={`flex items-center justify-center flex-wrap gap-6 max-md:gap-2 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>
                     Explore the
                     <div className="flex items-center justify-center border border-[#111111] rounded-full bg-[#E6FFF9] w-[72px] h-[72px] max-md:w-[64px] max-md:h-[64px]">
                         <Image src="/images/slider_4/1.gif" alt="arrow" width={48} height={48} />

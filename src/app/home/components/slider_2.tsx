@@ -254,6 +254,9 @@ export default function Slider2() {
                                 onMouseEnter={() => {
                                     handleIndexChange(index);
                                 }}
+                                // onClick={() => {
+                                //     handleIndexChange(index);
+                                // }}
                             >
                                 {item.name}
                             </div>
