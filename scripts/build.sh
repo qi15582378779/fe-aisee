@@ -18,7 +18,7 @@ fi
 
 # 构建项目
 echo "开始构建..."
-pnpm build
+npm run build
 
 echo "构建完成！"
 echo "basePath: $NEXT_PUBLIC_BASE_PATH"
