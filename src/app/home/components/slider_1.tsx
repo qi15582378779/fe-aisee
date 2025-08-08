@@ -69,15 +69,18 @@ export default function Slider1() {
     }, []);
 
     return (
-        <div ref={wrapperRef} className="w-full min-h-screen relative flex flex-col justify-between pt-[100px] pb-[27px] px-12 z-10 max-md:px-4 max-md:pt-[30px] max-md:pb-[86px]">
+        <div ref={wrapperRef} className="w-full min-h-screen relative flex flex-col justify-between pt-[100px] pb-[27px] px-12 z-10 max-md:px-4 max-md:pb-[86px] max-md:gap-6">
             <div className="flex justify-end relative z-10">
                 <div className="flex flex-col gap-2">
-                    <img src="/images/bg1.svg" alt="slider_1" ref={imgRef} style={{ objectFit: "contain", display: "block" }} />
+                    <img src="/images/bg1.png" alt="slider_1" ref={imgRef} style={{ objectFit: "contain", display: "block" }} />
                     <p className="text-[#111111] text-[16px] leading-[150%]">Product Demo • Live Analytics</p>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-6 text-[#111111] w-[925px] max-w-full absolute bottom-[27px] left-12 max-md:bottom-auto max-md:left-auto max-md:relative" ref={textRef}>
+            <div //
+                className="flex flex-col gap-6 text-[#111111] w-[925px] max-w-full absolute top-[calc(100vh-280px)] left-12 max-md:top-auto max-md:left-auto max-md:relative"
+                ref={textRef}
+            >
                 <p className="text-[48px] leading-[125%] max-md:text-[20px] max-md:leading-[120%]">Make Your Web3 Project Visible to AI.</p>
                 <p className="text-[68px] leading-[117.647%] max-md:text-[36px] max-md:leading-[133.333%]">All-in-One AEO Toolkit built for the AI-first internet.</p>
             </div>

@@ -22,6 +22,7 @@ interface FallingTextProps {
         borderRadius?: string;
         border?: string;
         boxShadow?: string;
+        whiteSpace?: string;
     }>; // 新增：每个span的自定义样式
     onRef?: (trigger: () => void) => void; // 新增：暴露触发函数给父组件
 }
@@ -66,7 +67,7 @@ const FallingText: React.FC<FallingTextProps> = ({
                     .join("; ");
 
                 return `<span
-          class="inline-block mx-[2px] select-none ${isHighlighted ? "text-cyan-500 font-bold" : ""}"
+          class="inline-block mx-[2px] select-none whitespace-nowrap ${isHighlighted ? "text-cyan-500 font-bold" : ""}"
           style="${styleString}"
         >
           ${word}

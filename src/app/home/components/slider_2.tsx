@@ -177,7 +177,7 @@ export default function Slider2() {
     const visible = isVisible("slider2");
 
     return (
-        <section ref={sectionRef} className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-4px px-12 relative z-10 max-md:px-4 max-md:py-[32px]">
+        <section ref={sectionRef} className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-[4px] px-12 relative z-10 max-md:px-4 max-md:py-[32px]">
             <div className="text-[#111111] min-h-[128px] mb-[112px] grid grid-cols-12 gap-12 max-md:grid-cols-1 max-md:mb-[32px]">
                 <p className={`text-[20px] leading-[140%] tracking-[0.5px] uppercase col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>AEO Workflow</p>
                 <p className={`text-[22.313px] leading-[143.417%] col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[50px]"}`}>AIsee boosts your Web3 project&apos;s visibility in AI search. Six smart steps. Fully automated. Measurable impact.</p>
@@ -193,8 +193,10 @@ export default function Slider2() {
                                     // install Swiper modules
                                     modules={[EffectCreative]}
                                     direction="vertical"
-                                    spaceBetween={50}
+                                    spaceBetween={20}
                                     slidesPerView={1}
+                                    // 怎么增加 slide之间的间距
+
                                     loop={true}
                                     // autoplay={{
                                     //     delay: 5000,
@@ -204,13 +206,12 @@ export default function Slider2() {
                                     effect="creative"
                                     creativeEffect={{
                                         prev: {
-                                            shadow: false /* 禁用阴影避免溢出 */,
-                                            // 大幅度超出容器范围确保完全隐藏
-                                            translate: [0, "-10%", -1000],
-                                            scale: 0.8 /* 缩小上一张进一步确保隐藏 */
+                                            shadow: false,
+                                            translate: [0, "calc(-10% - 20px)", -1000], // 原来的 -10% 基础上加 20px
+                                            scale: 0.8
                                         },
                                         next: {
-                                            translate: [0, "100%", 0]
+                                            translate: [0, "calc(100% + 20px)", 0] // 原来的 100% 基础上加 20px
                                         }
                                     }}
                                     speed={1000}

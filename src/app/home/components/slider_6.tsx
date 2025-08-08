@@ -58,7 +58,7 @@ export default function Slider6() {
     const visible = isVisible("slider6");
 
     return (
-        <section ref={sectionRef} className="w-full px-12 pt-[32px] pb-[48px] relative z-10 bg-[rgba(247,248,247,0.70)] text-[#111111] max-md:px-4 max-md:pt-[28px]">
+        <section ref={sectionRef} className="w-full px-12 pt-[32px] pb-[48px] relative z-10 bg-[rgba(247,248,247,0.70)] backdrop-blur-[2px] text-[#111111] max-md:px-4 max-md:pt-[28px]">
             <div className="grid grid-cols-12 items-center mb-10">
                 <div className="col-span-7"></div>
                 <div className="flex gap-[4.3px] items-baseline text-[35.1px] leading-[80.057%] col-span-5 max-md:text-[16px] max-md:leading-[175.625%]">
