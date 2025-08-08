@@ -1,13 +1,23 @@
 <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_181_3962)">
-<circle cx="20.9497" cy="20.6236" r="19.5" transform="rotate(-40 20.9497 20.6236)" fill="#FCEA59" stroke="#111111"/>
-<circle cx="20.9498" cy="20.6237" r="14.0833" transform="rotate(-40 20.9498 20.6237)" fill="#A7ACF6" stroke="#111111"/>
-<circle cx="20.9498" cy="20.6235" r="10.9583" transform="rotate(-40 20.9498 20.6235)" fill="#A7ACF6" stroke="#111111"/>
-<path d="M17.0947 16.8086C18.7302 15.4363 21.2392 15.6784 22.6921 17.4099L27.0259 22.5747L21.0502 27.589L16.717 22.4249C15.2639 20.6932 15.4606 18.1801 17.0947 16.8086Z" stroke="#111111" stroke-width="1.2"/>
+<g clip-path="url(#clip0_181_3963)">
+<circle cx="20.0293" cy="20.1097" r="19.5" transform="rotate(-9 20.0293 20.1097)" fill="#FCEA59" stroke="#111111"/>
+<circle cx="20.0294" cy="20.1098" r="14.0833" transform="rotate(-9 20.0294 20.1098)" fill="#A7ACF6" stroke="#111111"/>
+<circle cx="20.0294" cy="20.1097" r="10.9583" transform="rotate(-9 20.0294 20.1097)" fill="#A7ACF6" stroke="#111111"/>
+<g clip-path="url(#clip1_181_3963)">
+<g clip-path="url(#clip2_181_3963)">
+<path d="M18.6065 20.7147L19.8936 21.6499L21.3349 18.7639M19.303 15.5238C18.353 16.7628 16.9561 17.5811 15.4107 17.8038C15.3092 18.4324 15.3085 19.0731 15.4087 19.702C15.846 22.4636 18.102 24.4845 20.7624 24.738C23.2143 23.6753 24.7353 21.0561 24.2979 18.2946C24.1955 17.6476 23.9931 17.0413 23.7092 16.4889L23.6342 16.5008C22.0558 16.7508 20.5241 16.3616 19.303 15.5238Z" stroke="#111111" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
 </g>
 <defs>
-<clipPath id="clip0_181_3962">
-<rect width="40" height="40" fill="white" transform="translate(0.949707 0.623535)"/>
+<clipPath id="clip0_181_3963">
+<rect width="40" height="40" fill="white" transform="translate(0.0292969 0.109619)"/>
+</clipPath>
+<clipPath id="clip1_181_3963">
+<rect width="12" height="12" fill="white" transform="translate(13.1646 15.1221) rotate(-9)"/>
+</clipPath>
+<clipPath id="clip2_181_3963">
+<rect width="12" height="12" fill="white" transform="translate(13.1646 15.1221) rotate(-9)"/>
 </clipPath>
 </defs>
 </svg>
