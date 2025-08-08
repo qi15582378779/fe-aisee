@@ -6,6 +6,7 @@ import ScrollingElements from "@/components/ui/ScrollingElements";
 import { scrollingElementsImages } from "@/lib/imageConfigs";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { useAnimation } from "@/contexts/AnimationContext";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide, type SwiperRef } from "swiper/react";
@@ -69,7 +70,7 @@ export default function Slider2() {
             text: "No need for manual edits. Our agent automatically rewrites, restructures, and deploys content updates to your GitHub, Notion, Docs site, or CMS — with optional approval from you before publishing.",
             content: (
                 <ScrollingElements //
-                    className="w-[60%] mx-auto"
+                    className="w-[46%] mx-auto h-full"
                     elements={
                         //
                         scrollingElementsImages.map((item) => (
@@ -83,7 +84,6 @@ export default function Slider2() {
                             />
                         ))
                     }
-                    containerHeight={240}
                     itemHeight={32}
                     gap={50}
                     xOffset={150}
@@ -94,12 +94,20 @@ export default function Slider2() {
         {
             name: "Verify",
             text: "After publishing, AIsee rechecks your AI visibility — comparing search engine responses, citation frequency, keyword reach, and coverage improvements. A before/after report helps you measure what changed and where.",
-            content: <Image src="/images/slider_2/5539.png" alt="5539" className="w-[428px] h-full object-cover max-w-[90%] mx-auto" width={428} height={240} priority />
+            content: (
+                <div className="w-full h-full flex items-center justify-center">
+                    <Image src="/images/slider_2/5539.png" alt="5539" className="w-[428px] object-cover max-w-[90%] mx-auto" width={428} height={240} priority />
+                </div>
+            )
         },
         {
             name: "Visibility Boost",
             text: "With cleaner structure and AI-friendly content, your project is more likely to be seen, quoted, and recommended in ChatGPT, Perplexity, and beyond — bringing more organic exposure from users, devs, and investors.",
-            content: <Image src="/images/slider_2/5540.png" alt="5540" className="w-[428px] h-full object-cover max-w-[90%] mx-auto" width={428} height={240} priority />
+            content: (
+                <div className="w-full h-full flex items-center justify-center">
+                    <Image src="/images/slider_2/5540.png" alt="5540" className="w-[428px] object-cover max-w-[90%] mx-auto" width={428} height={240} priority />
+                </div>
+            )
         }
     ];
 
@@ -157,30 +165,41 @@ export default function Slider2() {
         };
     }, []);
 
+    const { registerAnimation, isVisible, setRef } = useAnimation();
+
+    const sectionRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        registerAnimation("slider2", false);
+        setRef("slider2", sectionRef);
+    }, []);
+
+    const visible = isVisible("slider2");
+
     return (
-        <div className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-4px px-12 relative z-10 max-md:px-4 max-md:py-[32px]">
+        <section ref={sectionRef} className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-4px px-12 relative z-10 max-md:px-4 max-md:py-[32px]">
             <div className="text-[#111111] min-h-[128px] mb-[112px] grid grid-cols-12 gap-12 max-md:grid-cols-1 max-md:mb-[32px]">
-                <p className="text-[20px] leading-[140%] tracking-[0.5px] uppercase col-span-6">AEO Workflow</p>
-                <p className="text-[22.313px] leading-[143.417%] col-span-6">AIsee boosts your Web3 project&apos;s visibility in AI search. Six smart steps. Fully automated. Measurable impact.</p>
+                <p className={`text-[20px] leading-[140%] tracking-[0.5px] uppercase col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>AEO Workflow</p>
+                <p className={`text-[22.313px] leading-[143.417%] col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[50px]"}`}>AIsee boosts your Web3 project&apos;s visibility in AI search. Six smart steps. Fully automated. Measurable impact.</p>
             </div>
 
             {!isMobile && (
-                <div className="grid grid-cols-12 gap-[132px]">
+                <div className={`grid grid-cols-12 gap-[132px] transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-100px]"}`}>
                     <div className="col-span-4 max-w-full">
                         <div className="flex flex-col gap-[20px]">
-                            <div className="w-full h-[240px]">
+                            <div className="w-full" style={{ height: "clamp(200px, 20vw, 400px)" }}>
                                 <Swiper
                                     ref={swiperRef}
                                     // install Swiper modules
-                                    modules={[EffectCreative, Autoplay]}
+                                    modules={[EffectCreative]}
                                     direction="vertical"
                                     spaceBetween={50}
                                     slidesPerView={1}
                                     loop={true}
-                                    autoplay={{
-                                        delay: 5000,
-                                        disableOnInteraction: false
-                                    }}
+                                    // autoplay={{
+                                    //     delay: 5000,
+                                    //     disableOnInteraction: false
+                                    // }}
                                     grabCursor={true}
                                     effect="creative"
                                     creativeEffect={{
@@ -227,7 +246,7 @@ export default function Slider2() {
                         </div>
                     </div>
 
-                    <div className="col-span-8 flex flex-col">
+                    <div className={`col-span-8 flex flex-col transition-all duration-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[100px]"}`}>
                         {data.map((item, index) => (
                             <div
                                 key={index}
@@ -248,12 +267,14 @@ export default function Slider2() {
                     {data.map((item, index) => (
                         <div key={index} className="w-full">
                             <div className="text-[36px] leading-[150%] text-[#111111] uppercase mb-4">{item.name}</div>
-                            <div className="w-full h-[240px] bg-white rounded-[12px] overflow-hidden relative border border-[#111111] border-solid mb-5">{item.content}</div>
+                            <div className="w-full bg-white rounded-[12px] overflow-hidden relative border border-[#111111] border-solid mb-5" style={{ height: "clamp(200px, 20vw, 400px)" }}>
+                                {item.content}
+                            </div>
                             <div className="text-[16px] leading-[134.454%] text-[#111111]">{item.text}</div>
                         </div>
                     ))}
                 </div>
             )}
-        </div>
+        </section>
     );
 }

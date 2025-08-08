@@ -49,14 +49,14 @@ export default function Slider4() {
             </div>
 
             <div className="flex flex-col justify-center items-center text-[#111111] text-[84.3px] leading-[108.327%] mb-[48px] max-md:text-[48px] max-md:leading-[150%]">
-                <div className="flex items-center gap-6 max-md:gap-2">
+                <div className={`flex items-center gap-6 max-md:gap-2 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>
                     Explore the
                     <div className="flex items-center justify-center border border-[#111111] rounded-full bg-[#E6FFF9] w-[72px] h-[72px] max-md:w-[64px] max-md:h-[64px]">
                         <Image src="/images/slider_4/1.gif" alt="arrow" width={48} height={48} />
                     </div>
                     <span className="max-md:hidden">Core Features of</span>
                 </div>
-                <p>
+                <p className={`transition-all duration-300 delay-100 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[50px]"}`}>
                     <span className="hidden max-md:inline">Core Features of</span>
                     AIsee&apos;s AEO Engine
                 </p>
@@ -64,7 +64,11 @@ export default function Slider4() {
 
             <div className="grid grid-cols-3 gap-[26px] max-md:grid-cols-1">
                 {data.map((item, index) => (
-                    <div key={index} style={{ backgroundColor: item.bg }} className="pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:transform hover:-translate-y-4 relative">
+                    <div
+                        key={index}
+                        style={{ backgroundColor: item.bg, transitionDelay: `${index * 100}ms` }}
+                        className={`pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:transform hover:-translate-y-4 relative ${visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-[50px] scale-90"}`}
+                    >
                         <p className="text-[36px] leading-[133.333%] tracking-[-1.25px] mb-4">{item.title}</p>
                         <p className="text-[18px] leading-[133.333%]">{item.des}</p>
 

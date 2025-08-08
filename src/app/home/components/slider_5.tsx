@@ -25,7 +25,9 @@ function PricingCard({
     price,
     description,
     features,
-    tag
+    tag,
+    index,
+    visible
 }: {
     name: string;
     icon: string;
@@ -34,9 +36,14 @@ function PricingCard({
     description: string;
     features: { title: string; isActive: boolean }[];
     tag?: string;
+    index?: number;
+    visible?: boolean;
 }) {
     return (
-        <div className={`border border-[#ECEFEC] rounded-[24px] p-[30px] text-[#111111] relative ${tag ? "bg-[#ECEFEC]" : "bg-white"}`}>
+        <div
+            className={`border border-[#ECEFEC] rounded-[24px] p-[30px] text-[#111111] relative ${tag ? "bg-[#ECEFEC]" : "bg-white"} transition-all duration-300 ${visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-[50px] scale-90"}`}
+            style={{ transitionDelay: `${index ? (index + 2) * 100 : 0}ms` }}
+        >
             {tag && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#cfff29] text-[14px] leading-[21px] px-3 py-[6px] rounded-lg w-max max-w-[90%] text-center">{tag}</div>}
 
             <div className="flex flex-col gap-[20px]">
@@ -182,7 +189,7 @@ export default function Slider5() {
                 </div>
             </div>
 
-            <div className="text-[#111111] text-[124px] leading-[122.038%] mb-[48px] flex flex-col max-md:text-[48px] max-md:leading-[150%]">
+            <div className={`text-[#111111] text-[124px] leading-[122.038%] mb-[48px] flex flex-col max-md:text-[48px] max-md:leading-[150%] transition-all duration-300 delay-100 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>
                 <span>Offer tiered pricing</span>
                 <span className="flex items-center gap-8 max-md:gap-3">
                     based on
@@ -194,7 +201,7 @@ export default function Slider5() {
             </div>
 
             <div className="flex justify-center">
-                <div className="flex border border-[#ECEFEC] rounded-[10px] bg-[#ECEFEC] p-[6px] mb-[40px] max-md:mb-[24px]">
+                <div className={`flex border border-[#ECEFEC] rounded-[10px] bg-[#ECEFEC] p-[6px] mb-[40px] max-md:mb-[24px] transition-all duration-300 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[-20px]"}`}>
                     {tabs.map((tab) => (
                         <span key={tab.name} className={`px-[16px] py-[10px] text-[#111111] text-[16px] leading-[150%] rounded-[10px] cursor-pointer transition-all duration-300 ${isTab === tab.name ? "bg-[#CFFF29]" : "bg-[#ECEFEC]"}`} onClick={() => setIsTab(tab.name)}>
                             {tab.label}
@@ -205,8 +212,8 @@ export default function Slider5() {
 
             {/* 定价卡片 */}
             <div className="grid grid-cols-3 gap-5 mb-8 max-md:grid-cols-1 max-md:gap-8">
-                {pricingCards.map((card) => (
-                    <PricingCard key={card.name} {...card} />
+                {pricingCards.map((card, index) => (
+                    <PricingCard key={card.name} {...card} index={index} visible={visible} />
                 ))}
             </div>
         </section>

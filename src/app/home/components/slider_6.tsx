@@ -67,11 +67,11 @@ export default function Slider6() {
                 </div>
             </div>
 
-            <div className="text-[100px] leading-[97.565%] mb-[48px] max-md:text-[48px] max-md:leading-[133.333%]">FAQ</div>
+            <div className={`text-[100px] leading-[97.565%] mb-[48px] max-md:text-[48px] max-md:leading-[133.333%] transition-all duration-300 delay-100 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>FAQ</div>
 
             <div className="flex flex-col gap-4">
                 {faqItems.map((item) => (
-                    <div key={item.id} className="group bg-[#f7f8f7] border-2 border-[#111111] rounded-2xl w-full transition-all duration-300">
+                    <div key={item.id} style={{ transitionDelay: `${item.id * 100}ms` }} className={`group bg-[#f7f8f7] border-2 border-[#111111] rounded-2xl w-full transition-all duration-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[50px]"}`}>
                         <div className="flex flex-row items-center justify-between px-10 py-[18px] w-full cursor-pointer max-md:px-[24px] max-md:py-[24px]" onClick={() => toggleFAQ(item.id)}>
                             <div className="text-[24px] leading-[32px] max-w-[75%]">{item.question}</div>
 
