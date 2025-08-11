@@ -170,26 +170,30 @@ export default function Slider5() {
 
     const { registerAnimation, isVisible, setRef } = useAnimation();
 
-    const sectionRef = useRef<HTMLElement>(null);
-
+    const titleRef = useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        registerAnimation("slider5", false);
-        setRef("slider5", sectionRef);
+        registerAnimation("slider5-title", false);
+        registerAnimation("slider5-card", false);
+
+        setRef("slider5-title", titleRef);
+        setRef("slider5-card", cardRef);
     }, []);
 
-    const visible = isVisible("slider5");
+    const visibleTitle = isVisible("slider5-title");
+    const visibleCard = isVisible("slider5-card");
 
     return (
-        <section ref={sectionRef} className="w-full px-12 pt-[32px] pb-[48px] relative z-10 max-md:px-4 max-md:pt-[12px]">
-            <div className="grid grid-cols-2 items-center mb-10">
+        <section className="w-full px-12 pt-[32px] pb-[48px] relative z-10 max-md:px-4 max-md:pt-[12px]">
+            <div ref={titleRef} className="grid grid-cols-2 items-center mb-10">
                 <div></div>
                 <div className="flex gap-[4.3px] items-baseline text-[#111111] text-[35.1px] leading-[80.057%] max-md:text-[16px] max-md:leading-[175.625%] max-md:justify-end max-md:px-[16px]">
-                    <span className={`flex w-[7px] h-[7px] rounded-full bg-[#05C92F] transition-all duration-700 ${visible ? "animate-bounce-twice" : "translate-y-10 opacity-0"}`}></span>
-                    <span className={`transition-all duration-700 ease-out ${visible ? "translate-x-0 opacity-100" : "translate-x-[70%] opacity-0"}`}>Pricing Page</span>
+                    <span className={`flex w-[7px] h-[7px] rounded-full bg-[#05C92F] transition-all duration-700 ${visibleTitle ? "animate-bounce-twice" : "translate-y-10 opacity-0"}`}></span>
+                    <span className={`transition-all duration-700 ease-out ${visibleTitle ? "translate-x-0 opacity-100" : "translate-x-[70%] opacity-0"}`}>Pricing Page</span>
                 </div>
             </div>
 
-            <div className={`text-[#111111] text-[124px] leading-[122.038%] mb-[48px] flex flex-col max-md:text-[48px] max-md:leading-[150%] transition-all duration-300 delay-100 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>
+            <div ref={titleRef} className={`text-[#111111] text-[124px] leading-[122.038%] mb-[48px] flex flex-col max-md:text-[48px] max-md:leading-[150%] transition-all duration-300 delay-100 ${visibleTitle ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>
                 <span>Offer tiered pricing</span>
                 <span className="flex items-center gap-8 max-md:gap-3">
                     based on
@@ -201,7 +205,7 @@ export default function Slider5() {
             </div>
 
             <div className="flex justify-center">
-                <div className={`flex border border-[#ECEFEC] rounded-[10px] bg-[#ECEFEC] p-[6px] mb-[40px] max-md:mb-[24px] transition-all duration-300 delay-200 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[-20px]"}`}>
+                <div className={`flex border border-[#ECEFEC] rounded-[10px] bg-[#ECEFEC] p-[6px] mb-[40px] max-md:mb-[24px] transition-all duration-300 delay-200 ${visibleTitle ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[-20px]"}`}>
                     {tabs.map((tab) => (
                         <span key={tab.name} className={`px-[16px] py-[10px] text-[#111111] text-[16px] leading-[150%] rounded-[10px] cursor-pointer transition-all duration-300 ${isTab === tab.name ? "bg-[#CFFF29]" : "bg-[#ECEFEC]"}`} onClick={() => setIsTab(tab.name)}>
                             {tab.label}
@@ -211,9 +215,9 @@ export default function Slider5() {
             </div>
 
             {/* 定价卡片 */}
-            <div className="grid grid-cols-3 gap-5 mb-8 max-md:grid-cols-1 max-md:gap-8">
+            <div ref={cardRef} className="grid grid-cols-3 gap-5 mb-8 max-md:grid-cols-1 max-md:gap-8">
                 {pricingCards.map((card, index) => (
-                    <PricingCard key={card.name} {...card} index={index} visible={visible} />
+                    <PricingCard key={card.name} {...card} index={index} visible={visibleCard} />
                 ))}
             </div>
         </section>
