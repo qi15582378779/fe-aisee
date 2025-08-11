@@ -18,7 +18,7 @@
     cursor: default;
 }
 .btn-30:-moz-focusring {
-    outline: auto;
+    outline: none;
 }
 .btn-30 svg {
     display: block;
@@ -33,6 +33,7 @@
     overflow: hidden;
     /* padding: 1rem 2rem; */
     position: relative;
+    box-shadow: none;
 }
 .btn-30 span {
     /* mix-blend-mode: difference; */
