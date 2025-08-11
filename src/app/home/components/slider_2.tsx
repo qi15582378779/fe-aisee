@@ -271,7 +271,7 @@ export default function Slider2() {
                     {data.map((item, index) => (
                         <div key={index} className="w-full">
                             <div className="text-[36px] leading-[150%] text-[#111111] uppercase mb-4">{item.name}</div>
-                            <div className="w-full bg-white rounded-[12px] overflow-hidden relative border border-[#111111] border-solid mb-5" style={{ height: "clamp(200px, 20vw, 400px)" }}>
+                            <div className="w-full bg-white rounded-[12px] overflow-hidden relative border border-[#111111] border-solid mb-5" style={{ height: "clamp(300px, 30vw, 500px)" }}>
                                 {item.content}
                             </div>
                             <div className="text-[16px] leading-[134.454%] text-[#111111]">{item.text}</div>
