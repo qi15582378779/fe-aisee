@@ -59,20 +59,20 @@ export const listImages = [
 ];
 
 export const cardStackImages = [
-    { id: 1, img: "/images/slider_4/5532.png", width: 248 },
-    { id: 2, img: "/images/slider_4/5533.png", width: 304 },
-    { id: 3, img: "/images/slider_4/5534.png", width: 280 },
-    { id: 4, img: "/images/slider_4/5535.png", width: 204 },
+    { id: 1, img: "/images/slider_4/5532.png" },
+    { id: 2, img: "/images/slider_4/5533.png" },
+    { id: 3, img: "/images/slider_4/5534.png" },
+    { id: 4, img: "/images/slider_4/5535.png" },
 
-    { id: 5, img: "/images/slider_4/5532.png", width: 204 },
-    { id: 6, img: "/images/slider_4/5533.png", width: 204 },
-    { id: 7, img: "/images/slider_4/5534.png", width: 204 },
-    { id: 8, img: "/images/slider_4/5535.png", width: 204 },
+    // { id: 5, img: "/images/slider_4/5532.png" },
+    // { id: 6, img: "/images/slider_4/5533.png" },
+    // { id: 7, img: "/images/slider_4/5534.png" },
+    // { id: 8, img: "/images/slider_4/5535.png" },
 
-    { id: 9, img: "/images/slider_4/5532.png", width: 204 },
-    { id: 10, img: "/images/slider_4/5533.png", width: 204 },
-    { id: 11, img: "/images/slider_4/5534.png", width: 204 },
-    { id: 12, img: "/images/slider_4/5535.png", width: 204 }
+    // { id: 9, img: "/images/slider_4/5532.png" },
+    // { id: 10, img: "/images/slider_4/5533.png" },
+    // { id: 11, img: "/images/slider_4/5534.png" },
+    // { id: 12, img: "/images/slider_4/5535.png" }
 ];
 
 export const scrollingElementsImages = [

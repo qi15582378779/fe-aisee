@@ -7,6 +7,7 @@ import { AnimatedList } from "@/components/magicui/animated-list";
 import { StackedCards } from "@/components/ui/StackedCards";
 import { useAnimation } from "@/contexts/AnimationContext";
 import { useRef, useEffect, useState } from "react";
+import { CardStack } from "@/components/ui/CardStack";
 
 const data = [
     {
@@ -97,11 +98,19 @@ export default function Slider4() {
                         {index === 2 && (
                             <div className="w-full overflow-hidden my-[32px] flex flex-col items-center justify-center">
                                 <div>
-                                    <Image src="/images/slider_4/005.png" alt="slider_4" width={124} height={57} className="w-[124px] h-[57px] mb-1 ml-5" />
+                                    <Image src="/images/slider_4/005.png" alt="slider_4" width={124} height={57} className="w-[124px] h-[57px] ml-5" />
                                 </div>
 
-                                <div className="w-full h-[200px] overflow-hidden">
-                                    <StackedCards />
+                                <div className="w-full h-[200px] pt-[40px] flex items-center justify-center">
+                                    {/* <StackedCards /> */}
+                                    <CardStack
+                                        items={cardStackImages.map((item) => ({
+                                            id: item.id,
+                                            content: <Image src={item.img} alt="slider_4" width={304} height={56} className="w-[304px] h-[56px]" />
+                                        }))}
+                                        offset={20}
+                                        scaleFactor={0.1}
+                                    />
                                 </div>
                             </div>
                         )}
