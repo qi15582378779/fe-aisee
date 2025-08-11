@@ -17,27 +17,31 @@ export default function Slider6() {
         {
             id: 1,
             question: "What is AEO (Answer Engine Optimization)?",
-            answer: "Answer Engine Optimization (AEO) is the process of optimizing your content, data, and digital presence so that AI-powered answer engines—like ChatGPT, Perplexity, Claude, Bing Copilot, and other large language models—can understand, index, and directly recommend your product or content in response to user queries.\n\nUnlike traditional SEO, which focuses on ranking in search engine results pages (SERPs), AEO targets AI-driven answer engines that generate direct answers rather than lists of links.",
+            answer: "AEO is the process of optimizing your website and brand information so that AI-powered platforms (such as ChatGPT, Claude, Gemini, and Perplexity) can accurately understand, retrieve, and recommend your content in response to user queries. It ensures your business is visible and correctly represented in AI-driven answers.",
             isExpanded: true
         },
         {
             id: 2,
             question: "Is AEO the same as SEO?",
+            answer: "No. SEO focuses on optimizing for search engines like Google, aiming to rank higher in search results. AEO focuses on optimizing for AI-driven answer engines, ensuring your content is easily discoverable, understood, and recommended by AI platforms during conversations and Q&A.",
             isExpanded: false
         },
         {
             id: 3,
             question: "Will it affect my existing SEO performance?",
+            answer: "In most cases, AEO improvements can complement your existing SEO. Many AEO best practices—like structured data, clear content, and semantic markup—also benefit SEO. However, our approach ensures that changes are compatible with your existing SEO strategy.",
             isExpanded: false
         },
         {
             id: 4,
             question: "How long before I see results?",
+            answer: "It depends on the scope of improvements and how often AI platforms update their knowledge. Some changes (like structured data) can yield results in weeks, while broader brand recognition improvements may take a few months as AI models refresh their training or indexing.",
             isExpanded: false
         },
         {
             id: 5,
             question: "Can I connect it to Notion, WordPress, or GitHub?",
+            answer: "Yes. You can integrate Aisee with popular platforms like Notion, WordPress, and GitHub to automatically sync content updates, structured data, and metadata. This ensures your AI optimization is always up to date without manual re-uploading.",
             isExpanded: false
         }
     ]);
