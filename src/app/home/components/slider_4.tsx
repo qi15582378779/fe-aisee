@@ -68,7 +68,7 @@ export default function Slider4() {
                     <div
                         key={index}
                         style={{ backgroundColor: item.bg, transitionDelay: `${index * 100}ms` }}
-                        className={`flex flex-col gap-[32px] max-md:gap-[16px] pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:transform hover:-translate-y-4 relative ${visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-[50px] scale-90"} ${index !== 0 ? "overflow-hidden" : ""}`}
+                        className={`flex flex-col gap-[32px] max-md:gap-[16px] pt-8 px-6 rounded-[24px] text-[#111111] transition-all duration-300 hover:!delay-0 hover:transform hover:-translate-y-4 relative ${visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-[50px] scale-90"} ${index !== 0 ? "overflow-hidden" : ""}`}
                     >
                         <div>
                             <p className="text-[36px] leading-[133.333%] tracking-[-1.25px] mb-4">{item.title}</p>
