@@ -103,7 +103,7 @@ function PricingCard({
             <div className="flex flex-col gap-4 items-start justify-start">
                 <div className="text-[16px] leading-[24px]">Features Included:</div>
 
-                <div className="flex flex-col items-start justify-start w-full">
+                <div className="flex flex-col items-start justify-start w-full gap-[18px]">
                     {features.map((feature, index) => (
                         <div className="w-full" key={index}>
                             <div className="w-full flex items-center justify-between">
@@ -125,7 +125,7 @@ function PricingCard({
                                 </div> */}
                             </div>
 
-                            {index !== features.length - 1 && <div className={`h-px shrink-0 w-full my-3 ${tag ? "bg-[#D1D6E0]" : "bg-[#ecefec]"}`} />}
+                            {/* {index !== features.length - 1 && <div className={`h-px shrink-0 w-full my-3 ${tag ? "bg-[#D1D6E0]" : "bg-[#ecefec]"}`} />} */}
                         </div>
                     ))}
                 </div>
