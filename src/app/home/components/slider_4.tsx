@@ -12,17 +12,17 @@ import { CardStack } from "@/components/ui/CardStack";
 const data = [
     {
         title: "AEO Diagnostic Engine",
-        des: "Analyze your website or product across AI search engines and output an AEO Score.",
+        des: "Scan your website or product across AI search engines to measure visibility and generate an AEO Score.",
         bg: "#D2F6A7"
     },
     {
         title: "Optimization Recommendation Engine",
-        des: "Actionable improvements based on scoring output.",
+        des: "Get clear, prioritized actions to boost your AI search visibility and ranking.",
         bg: "#FFD0E2"
     },
     {
         title: "Agent Executor",
-        des: "Let an AI Agent complete tasks across content, code, or deployment.",
+        des: "Let an AISee  Agent Automatically applys ioptimization tasks across content, code, or deployment.",
         bg: "#FCEA59"
     }
 ];

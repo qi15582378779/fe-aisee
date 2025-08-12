@@ -81,7 +81,7 @@ export default function Slider1() {
                 className="flex flex-col gap-6 text-[#111111] w-[925px] max-w-full absolute top-[calc(100vh-280px)] left-12 max-md:top-auto max-md:left-auto max-md:relative"
                 ref={textRef}
             >
-                <p className="text-[48px] leading-[125%] max-md:text-[20px] max-md:leading-[120%]">Make Your Web3 Project Visible to AI.</p>
+                <p className="text-[48px] leading-[125%] max-md:text-[20px] max-md:leading-[120%]">Make Your Project Visible to AI.</p>
                 <p className="text-[68px] leading-[117.647%] max-md:text-[36px] max-md:leading-[133.333%]">All-in-One AEO Toolkit built for the AI-first internet.</p>
             </div>
         </div>

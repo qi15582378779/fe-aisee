@@ -4,6 +4,7 @@ import { useAnimation } from "@/contexts/AnimationContext";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import ArrowRight from "@/icons/arrowRight";
+import CountUp from "@/components/ui/CountUp";
 
 const tabs = [
     {
@@ -22,23 +23,37 @@ function PricingCard({
     name,
     icon,
     type,
-    price,
+    prices,
     description,
     features,
     tag,
     index,
-    visible
+    visible,
+    isTab
 }: {
     name: string;
     icon: string;
     type: string;
-    price: string;
+    prices: { [key: string]: string };
     description: string;
-    features: { title: string; isActive: boolean }[];
+    features: { content: React.ReactNode; isActive: boolean }[];
     tag?: string;
     index?: number;
     visible?: boolean;
+    isTab?: string;
 }) {
+    const [previousPrice, setPreviousPrice] = useState(0);
+    const [currentPrice, setCurrentPrice] = useState(parseInt(prices[isTab || "Y"]));
+
+    // 当标签切换时，更新价格
+    useEffect(() => {
+        const newPrice = parseInt(prices[isTab || "Y"]);
+        if (newPrice !== currentPrice) {
+            setPreviousPrice(currentPrice);
+            setCurrentPrice(newPrice);
+        }
+    }, [isTab, prices, currentPrice]);
+
     return (
         <div
             className={`border border-[#ECEFEC] rounded-[24px] p-[30px] text-[#111111] relative ${tag ? "bg-[#ECEFEC]" : "bg-white"} transition-all duration-300 ${visible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-[50px] scale-90"}`}
@@ -51,9 +66,12 @@ function PricingCard({
                     <Image src={icon} alt="black" width={50} height={50} className="w-[50px] h-[50px]" />
 
                     <div className="flex flex-row gap-0.5 items-center text-[#111111]">
-                        <div className="text-[26px] leading-[39px]">{price}</div>
+                        <div className="text-[26px] leading-[39px]">
+                            $
+                            <CountUp to={currentPrice} from={previousPrice} duration={1.5} delay={0} className="inline-block" />
+                        </div>
 
-                        <div className="text-[14px] leading-[21px]">/ Per Yearly</div>
+                        <div className="text-[14px] leading-[21px]">/ Per {isTab === "M" ? "Month" : "Year"}</div>
                     </div>
                 </div>
 
@@ -63,7 +81,7 @@ function PricingCard({
                         <div className="bg-[#cfff29] px-2 py-1 rounded-lg text-[13px] leading-[18px]">{type}</div>
                     </div>
 
-                    <div className="text-[16px] leading-[24px]">{description}</div>
+                    <div className="text-[16px] leading-[24px] min-h-[48px]">{description}</div>
                 </div>
             </div>
 
@@ -87,7 +105,7 @@ function PricingCard({
 
                 <div className="flex flex-col items-start justify-start w-full">
                     {features.map((feature, index) => (
-                        <div className="w-full" key={feature.title}>
+                        <div className="w-full" key={index}>
                             <div className="w-full flex items-center justify-between">
                                 <div className="flex gap-1.5 items-center justify-start">
                                     {feature.isActive ? (
@@ -99,12 +117,12 @@ function PricingCard({
                                             <Image src="/images/slider_5/icon2.svg" alt="icon" width={12} height={12} className="w-[12px] h-[12px]" />
                                         </div>
                                     )}
-                                    <div className="text-[16px] leading-[24px]">{feature.title}</div>
+                                    <div className="text-[16px] leading-[24px] flex items-center justify-start gap-[6px] flex-wrap">{feature.content}</div>
                                 </div>
 
-                                <div className="flex items-center justify-center">
+                                {/* <div className="flex items-center justify-center">
                                     <Image src="/images/slider_5/icon3.svg" alt="icon" width={18} height={18} className="w-[18px] h-[18px]" />
-                                </div>
+                                </div> */}
                             </div>
 
                             {index !== features.length - 1 && <div className={`h-px shrink-0 w-full my-3 ${tag ? "bg-[#D1D6E0]" : "bg-[#ecefec]"}`} />}
@@ -121,46 +139,108 @@ const pricingCards = [
         name: "Starter",
         icon: "/images/slider_5/icon4.svg",
         type: "For Individuals",
-        price: "$99",
-        description: "Affordable option for small teams seeking essential project management.",
+        prices: {
+            M: "9",
+            Y: "99"
+        },
+        description: "Get the basics of AEO Checker, at a limited rate.",
         features: [
-            { title: "Task Management", isActive: true },
-            { title: "Real-time Collaboration", isActive: true },
-            { title: "Customizable Dashboards", isActive: true },
-            { title: "Advanced Analytics", isActive: false },
-            { title: "Resource Allocation", isActive: false },
-            { title: "Mobile Accessibility", isActive: false }
+            {
+                content: <>10 AI Visibility Checks / month</>,
+                isActive: true
+            },
+            {
+                content: (
+                    <>
+                        Access to Core AI Models
+                        <Image src="/images/slider_5/001.svg" alt="icon" width={36} height={20} className="w-[36px] h-[20px]" />
+                    </>
+                ),
+                isActive: true
+            },
+            {
+                content: <>AI Presence Report (Basic)</>,
+                isActive: true
+            },
+            {
+                content: <>Competitor Mentions Summary (Basic)</>,
+                isActive: true
+            },
+            {
+                content: <>PDF Report Download (Basic)</>,
+                isActive: true
+            }
         ]
     },
     {
-        name: "Pro",
+        name: "Developer",
         icon: "/images/slider_5/icon6.svg",
         type: "For Startups",
-        price: "$199",
-        description: "Comprehensive package tailored for growing businesses.",
+        prices: {
+            M: "25",
+            Y: "270"
+        },
+        description: "Run unlimited monthly checks with limited models.",
         features: [
-            { title: "Task Management", isActive: true },
-            { title: "Real-time Collaboration", isActive: true },
-            { title: "Customizable Dashboards", isActive: true },
-            { title: "Advanced Analytics", isActive: true },
-            { title: "Resource Allocation", isActive: false },
-            { title: "Mobile Accessibility", isActive: false }
+            { content: <>Unlimited Al Visibility Checks</>, isActive: true },
+            {
+                content: (
+                    <>
+                        Access to All Al Models
+                        <Image src="/images/slider_5/002.svg" alt="icon" width={116} height={20} className="w-[116px] h-[20px]" />
+                    </>
+                ),
+                isActive: true
+            },
+            { content: <>Full Al Presence, Competitor Landscape & Strategy Review Reports</>, isActive: true },
+            { content: <>PDF Report Download & Share Link (Full)</>, isActive: true },
+            { content: <>Priority Scan Queue</>, isActive: true }
         ],
-        tag: "Use “FIRST100” code for 60% Discount"
+        tag: "Save ~15%"
     },
     {
-        name: "Enterprise",
+        name: "Pro",
         icon: "/images/slider_5/icon7.svg",
         type: "For Organizations",
-        price: "$399",
-        description: "Customized solutions for large enterprises with robust features.",
+        prices: {
+            M: "55",
+            Y: "594"
+        },
+        description: "Optimize for long term AEO presence and track progress.",
         features: [
-            { title: "Task Management", isActive: true },
-            { title: "Real-time Collaboration", isActive: true },
-            { title: "Customizable Dashboards", isActive: true },
-            { title: "Advanced Analytics", isActive: true },
-            { title: "Resource Allocation", isActive: true },
-            { title: "Mobile Accessibility", isActive: true }
+            { content: <>Unlimited AI Visibility Checks</>, isActive: true },
+            {
+                content: (
+                    <>
+                        Access to All Al Models
+                        <Image src="/images/slider_5/002.svg" alt="icon" width={116} height={20} className="w-[116px] h-[20px]" />
+                    </>
+                ),
+                isActive: true
+            },
+            { content: <>Full Reports + Historical Data Tracking</>, isActive: true },
+            { content: <>Automated Action Plan Execution</>, isActive: true },
+            {
+                content: (
+                    <>
+                        API Access
+                        <Image src="/images/slider_5/003.svg" alt="icon" width={52} height={20} className="w-[52px] h-[20px]" />
+                    </>
+                ),
+                isActive: true
+            },
+            { content: <>PDF Download, Share Link & Scheduled Reports</>, isActive: true },
+            { content: <>Dedicated Account Manager</>, isActive: true },
+            { content: <>Priority Support (24/7)</>, isActive: true },
+            {
+                content: (
+                    <>
+                        Advanced Analytics Dashboard
+                        <span className="flex items-center justify-center text-[14px] h-[24px] px-[6px] rounded-[4px] bg-[rgba(17,17,17,0.05)]">Soon</span>
+                    </>
+                ),
+                isActive: true
+            }
         ]
     }
 ];
@@ -217,7 +297,7 @@ export default function Slider5() {
             {/* 定价卡片 */}
             <div ref={cardRef} className="grid grid-cols-3 gap-5 mb-8 max-md:grid-cols-1 max-md:gap-8">
                 {pricingCards.map((card, index) => (
-                    <PricingCard key={card.name} {...card} index={index} visible={visibleCard} />
+                    <PricingCard key={card.name} {...card} index={index} visible={visibleCard} isTab={isTab} />
                 ))}
             </div>
         </section>

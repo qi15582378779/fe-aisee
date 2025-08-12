@@ -7,7 +7,7 @@ import { useRef, useEffect } from "react";
 const data = [
     {
         title: "AI Visibility Audit",
-        des: "Scan your entire content stack — website, docs, Mirror, and social — to check how AI sees your project."
+        des: "Scan your entire content stack — website, docs, github, and social — to check how AI sees your project."
     },
     {
         title: "End-to-end AEO lifecycle",

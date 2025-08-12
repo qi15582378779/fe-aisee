@@ -16,7 +16,7 @@ import "swiper/css/autoplay";
 import "swiper/css/grid";
 import "swiper/css/effect-creative";
 
-const customText = "Web Animation, Roadmap, Tokenomics, Suggests rewrites";
+const customText = "Add Schema.org, AI-Ready Text, Fix Meta Data, Optimize Content";
 const customSpanStyles = [
     { backgroundColor: "#D3F6A9", color: "#1C2128", padding: "15px 32px", borderRadius: "100px" },
     { backgroundColor: "#000", color: "#FFF", padding: "15px 32px", borderRadius: "100px" },
@@ -35,7 +35,7 @@ export default function Slider2() {
     const data: { name: string; text: string; content?: React.ReactNode }[] = [
         {
             name: "Analyze",
-            text: "AIsee crawls your project's website, Docs, Mirror posts, and Twitter threads to extract structured information. It identifies key modules like FAQs, Tokenomics, Roadmap, and Team intro, while simulating how ChatGPT or Perplexity perceives your content.",
+            text: "AIsee crawls your product's entire online presence — including your website, documentation, blog posts, media coverage, and social channels — to extract structured information. It identifies key sections such as FAQs, product features, roadmap, and team introduction, while simulating how leading AI platforms interpret and recommend your content.",
             content: <RotatingOrbitalAnimation />
         },
         {
@@ -180,7 +180,7 @@ export default function Slider2() {
         <section ref={sectionRef} className="w-full pt-[96px] pb-[124px] bg-white/70 backdrop-blur-[4px] px-12 relative z-10 max-md:px-4 max-md:py-[32px]">
             <div className="text-[#111111] min-h-[128px] mb-[112px] grid grid-cols-12 gap-12 max-md:grid-cols-1 max-md:mb-[32px]">
                 <p className={`text-[20px] leading-[140%] tracking-[0.5px] uppercase col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[-50px]"}`}>AEO Workflow</p>
-                <p className={`text-[22.313px] leading-[143.417%] col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[50px]"}`}>AIsee boosts your Web3 project&apos;s visibility in AI search. Six smart steps. Fully automated. Measurable impact.</p>
+                <p className={`text-[22.313px] leading-[143.417%] col-span-6 transition-all duration-300 ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[50px]"}`}>AIsee boosts your project&apos;s visibility in AI search. Six smart steps. Fully automated. Measurable impact.</p>
             </div>
 
             {!isMobile && (

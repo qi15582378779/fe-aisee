@@ -1,10 +1,10 @@
-# AISEE - AI-First Web3 Project Visibility Platform
+# AISEE - AI-First Project Visibility Platform
 
-AISEE is a comprehensive AEO (AI Engine Optimization) toolkit designed for the AI-first internet, helping Web3 projects gain better visibility in the AI era.
+AISEE is a comprehensive AEO (AI Engine Optimization) toolkit designed for the AI-first internet, helping projects gain better visibility in the AI era.
 
 ## 🚀 Project Overview
 
-AISEE is a modern Next.js application focused on providing AI-driven optimization solutions for Web3 projects. The project adopts the latest frontend technology stack, delivering smooth user experiences and rich animation effects.
+AISEE is a modern Next.js application focused on providing AI-driven optimization solutions for projects. The project adopts the latest frontend technology stack, delivering smooth user experiences and rich animation effects.
 
 ## ✨ Key Features
 
@@ -216,4 +216,4 @@ This project is private.
 
 ---
 
-**AISEE** - Make Your Web3 Project Visible to AI 🚀
+**AISEE** - Make Your Project Visible to AI 🚀
