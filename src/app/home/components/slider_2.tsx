@@ -34,6 +34,7 @@ export default function Slider2() {
     const [triggerType, setTriggerType] = useState<TriggerType>("manual");
 
     const [isMobile, setIsMobile] = useState(false);
+    const [isMobileReady, setIsMobileReady] = useState(false);
 
     const data: { name: string; text: string; content?: React.ReactNode }[] = [
         {
@@ -69,7 +70,23 @@ export default function Slider2() {
                             }}
                         />
                     ) : (
-                        <FallingText text={customText} separator="," spanStyles={customSpanStyles} trigger={"auto"} gravity={0.8} fontSize="16px" />
+                        <FallingText
+                            text={customText}
+                            separator=","
+                            spanStyles={customSpanStyles}
+                            trigger={"auto"}
+                            gravity={0.8}
+                            fontSize="16px"
+                            onRef={(trigger) => {
+                                fallingTextTriggerRef.current = trigger;
+                                // 移动端准备好后触发动画
+                                if (isMobileReady) {
+                                    setTimeout(() => {
+                                        trigger();
+                                    }, 200);
+                                }
+                            }}
+                        />
                     )}
                 </>
             )
@@ -168,12 +185,14 @@ export default function Slider2() {
 
         console.log("_isMobile", _isMobile);
         setIsMobile(_isMobile);
+        
         if (_isMobile) {
-            setTriggerType("auto");
+            // 移动端需要等待组件完全挂载后再触发
             setTimeout(() => {
-                fallingTextTriggerRef.current?.();
-            }, 100);
+                setIsMobileReady(true);
+            }, 300);
         }
+        
         return () => {
             cleanup();
         };

@@ -82,7 +82,13 @@ const FallingText: React.FC<FallingTextProps> = ({
 
     useEffect(() => {
         if (trigger === "auto") {
-            setEffectStarted(true);
+            // 移动端需要额外延迟确保容器尺寸稳定
+            const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+            const delay = isMobile ? 500 : 100;
+
+            setTimeout(() => {
+                setEffectStarted(true);
+            }, delay);
             return;
         }
         if (trigger === "scroll" && containerRef.current) {
@@ -122,150 +128,160 @@ const FallingText: React.FC<FallingTextProps> = ({
 
         // 添加延迟确保容器尺寸稳定
         const initPhysics = () => {
-            setTimeout(() => {
-                if (!containerRef.current) return;
+            const initWithRetry = (retryCount = 0) => {
+                setTimeout(() => {
+                    if (!containerRef.current) return;
 
-                const width = containerRef.current.scrollWidth;
-                const height = containerRef.current.scrollHeight;
+                    const width = containerRef.current.scrollWidth;
+                    const height = containerRef.current.scrollHeight;
 
-                console.log("containerRef", containerRef.current);
-                console.log("width", width, "height", height);
-
-                if (width <= 0 || height <= 0) return;
-
-                const engine = Engine.create();
-                engine.world.gravity.y = gravity;
-
-                // 确保 canvas 容器有正确的尺寸，并清理旧的 canvas
-                if (canvasContainerRef.current) {
-                    canvasContainerRef.current.style.width = `${width}px`;
-                    canvasContainerRef.current.style.height = `${height}px`;
-
-                    // 清理所有已存在的 canvas
-                    const existingCanvases = canvasContainerRef.current.querySelectorAll("canvas");
-                    existingCanvases.forEach((canvas) => {
-                        canvasContainerRef.current!.removeChild(canvas);
-                    });
-                }
-
-                const render = Render.create({
-                    element: canvasContainerRef.current!,
-                    engine,
-                    options: {
-                        width,
-                        height,
-                        background: backgroundColor,
-                        wireframes
+                    // 如果尺寸仍然为0，且重试次数少于3次，则重试
+                    if ((width <= 0 || height <= 0) && retryCount < 3) {
+                        console.log(`Retry ${retryCount + 1}: container size not ready, retrying...`);
+                        initWithRetry(retryCount + 1);
+                        return;
                     }
-                });
 
-                const boundaryOptions = {
-                    isStatic: true,
-                    render: { fillStyle: "transparent" }
-                };
-                // 修复地板位置，确保在容器底部
-                const floor = Bodies.rectangle(width / 2, height - 10, width, 20, boundaryOptions);
-                const leftWall = Bodies.rectangle(-10, height / 2, 20, height, boundaryOptions);
-                const rightWall = Bodies.rectangle(width + 10, height / 2, 20, height, boundaryOptions);
-                const ceiling = Bodies.rectangle(width / 2, -10, width, 20, boundaryOptions);
-
-                if (!textRef.current) return;
-                const wordSpans = textRef.current.querySelectorAll("span");
-                const wordBodies = [...wordSpans].map((elem) => {
-                    const rect = elem.getBoundingClientRect();
-                    const containerRect = containerRef.current!.getBoundingClientRect();
-
-                    const x = rect.left - containerRect.left + rect.width / 2;
-                    const y = rect.top - containerRect.top + rect.height / 2;
-
-                    const body = Bodies.rectangle(x, y, rect.width, rect.height, {
-                        render: { fillStyle: "transparent" },
-                        restitution: 0.3, // 降低弹性，让元素更容易停在底部
-                        frictionAir: 0.005, // 减少空气阻力
-                        friction: 0.1 // 减少摩擦力
-                    });
-                    Matter.Body.setVelocity(body, {
-                        x: (Math.random() - 0.5) * 5,
-                        y: 0
-                    });
-                    Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.05);
-
-                    return { elem, body };
-                });
-
-                wordBodies.forEach(({ elem, body }) => {
-                    elem.style.position = "absolute";
-                    elem.style.left = `${body.position.x - body.bounds.max.x + body.bounds.min.x / 2}px`;
-                    elem.style.top = `${body.position.y - body.bounds.max.y + body.bounds.min.y / 2}px`;
-                    elem.style.transform = "none";
-                });
-
-                const mouse = Mouse.create(containerRef.current!);
-                const mouseConstraint = MouseConstraint.create(engine, {
-                    mouse,
-                    constraint: {
-                        stiffness: mouseConstraintStiffness,
-                        render: { visible: false }
+                    if (width <= 0 || height <= 0) {
+                        console.log("Container size still not ready after retries, aborting");
+                        return;
                     }
-                });
-                render.mouse = mouse;
 
-                World.add(engine.world, [floor, leftWall, rightWall, ceiling, mouseConstraint, ...wordBodies.map((wb) => wb.body)]);
+                    const engine = Engine.create();
+                    engine.world.gravity.y = gravity;
 
-                const runner = Runner.create();
-                Runner.run(runner, engine);
-                Render.run(render);
-
-                // 监听窗口大小变化，重新调整 canvas 尺寸
-                const handleResize = () => {
-                    if (containerRef.current && canvasContainerRef.current) {
-                        const newWidth = containerRef.current.scrollWidth;
-                        const newHeight = containerRef.current.scrollHeight;
-
-                        if (newWidth > 0 && newHeight > 0) {
-                            canvasContainerRef.current.style.width = `${newWidth}px`;
-                            canvasContainerRef.current.style.height = `${newHeight}px`;
-                            render.canvas.width = newWidth;
-                            render.canvas.height = newHeight;
-                            render.options.width = newWidth;
-                            render.options.height = newHeight;
-                        }
-                    }
-                };
-
-                window.addEventListener("resize", handleResize);
-
-                const updateLoop = () => {
-                    wordBodies.forEach(({ body, elem }) => {
-                        const { x, y } = body.position;
-                        // 确保元素不会超出容器边界
-                        const clampedX = Math.max(0, Math.min(x, width));
-                        const clampedY = Math.max(0, Math.min(y, height - 5)); // 留出一些空间给地板
-
-                        elem.style.left = `${clampedX}px`;
-                        elem.style.top = `${clampedY}px`;
-                        elem.style.transform = `translate(-50%, -50%) rotate(${body.angle}rad)`;
-                    });
-                    Matter.Engine.update(engine);
-                    requestAnimationFrame(updateLoop);
-                };
-                updateLoop();
-
-                return () => {
-                    window.removeEventListener("resize", handleResize);
-                    Render.stop(render);
-                    Runner.stop(runner);
-                    // 清理所有 canvas
+                    // 确保 canvas 容器有正确的尺寸，并清理旧的 canvas
                     if (canvasContainerRef.current) {
+                        canvasContainerRef.current.style.width = `${width}px`;
+                        canvasContainerRef.current.style.height = `${height}px`;
+
+                        // 清理所有已存在的 canvas
                         const existingCanvases = canvasContainerRef.current.querySelectorAll("canvas");
                         existingCanvases.forEach((canvas) => {
                             canvasContainerRef.current!.removeChild(canvas);
                         });
                     }
-                    World.clear(engine.world, false);
-                    Engine.clear(engine);
-                };
-            }, 100);
+
+                    const render = Render.create({
+                        element: canvasContainerRef.current!,
+                        engine,
+                        options: {
+                            width,
+                            height,
+                            background: backgroundColor,
+                            wireframes
+                        }
+                    });
+
+                    const boundaryOptions = {
+                        isStatic: true,
+                        render: { fillStyle: "transparent" }
+                    };
+                    // 修复地板位置，确保在容器底部
+                    const floor = Bodies.rectangle(width / 2, height - 10, width, 20, boundaryOptions);
+                    const leftWall = Bodies.rectangle(-10, height / 2, 20, height, boundaryOptions);
+                    const rightWall = Bodies.rectangle(width + 10, height / 2, 20, height, boundaryOptions);
+                    const ceiling = Bodies.rectangle(width / 2, -10, width, 20, boundaryOptions);
+
+                    if (!textRef.current) return;
+                    const wordSpans = textRef.current.querySelectorAll("span");
+                    const wordBodies = [...wordSpans].map((elem) => {
+                        const rect = elem.getBoundingClientRect();
+                        const containerRect = containerRef.current!.getBoundingClientRect();
+
+                        const x = rect.left - containerRect.left + rect.width / 2;
+                        const y = rect.top - containerRect.top + rect.height / 2;
+
+                        const body = Bodies.rectangle(x, y, rect.width, rect.height, {
+                            render: { fillStyle: "transparent" },
+                            restitution: 0.3, // 降低弹性，让元素更容易停在底部
+                            frictionAir: 0.005, // 减少空气阻力
+                            friction: 0.1 // 减少摩擦力
+                        });
+                        Matter.Body.setVelocity(body, {
+                            x: (Math.random() - 0.5) * 5,
+                            y: 0
+                        });
+                        Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.05);
+
+                        return { elem, body };
+                    });
+
+                    wordBodies.forEach(({ elem, body }) => {
+                        elem.style.position = "absolute";
+                        elem.style.left = `${body.position.x - body.bounds.max.x + body.bounds.min.x / 2}px`;
+                        elem.style.top = `${body.position.y - body.bounds.max.y + body.bounds.min.y / 2}px`;
+                        elem.style.transform = "none";
+                    });
+
+                    const mouse = Mouse.create(containerRef.current!);
+                    const mouseConstraint = MouseConstraint.create(engine, {
+                        mouse,
+                        constraint: {
+                            stiffness: mouseConstraintStiffness,
+                            render: { visible: false }
+                        }
+                    });
+                    render.mouse = mouse;
+
+                    World.add(engine.world, [floor, leftWall, rightWall, ceiling, mouseConstraint, ...wordBodies.map((wb) => wb.body)]);
+
+                    const runner = Runner.create();
+                    Runner.run(runner, engine);
+                    Render.run(render);
+
+                    // 监听窗口大小变化，重新调整 canvas 尺寸
+                    const handleResize = () => {
+                        if (containerRef.current && canvasContainerRef.current) {
+                            const newWidth = containerRef.current.scrollWidth;
+                            const newHeight = containerRef.current.scrollHeight;
+
+                            if (newWidth > 0 && newHeight > 0) {
+                                canvasContainerRef.current.style.width = `${newWidth}px`;
+                                canvasContainerRef.current.style.height = `${newHeight}px`;
+                                render.canvas.width = newWidth;
+                                render.canvas.height = newHeight;
+                                render.options.width = newWidth;
+                                render.options.height = newHeight;
+                            }
+                        }
+                    };
+
+                    window.addEventListener("resize", handleResize);
+
+                    const updateLoop = () => {
+                        wordBodies.forEach(({ body, elem }) => {
+                            const { x, y } = body.position;
+                            // 确保元素不会超出容器边界
+                            const clampedX = Math.max(0, Math.min(x, width));
+                            const clampedY = Math.max(0, Math.min(y, height - 5)); // 留出一些空间给地板
+
+                            elem.style.left = `${clampedX}px`;
+                            elem.style.top = `${clampedY}px`;
+                            elem.style.transform = `translate(-50%, -50%) rotate(${body.angle}rad)`;
+                        });
+                        Matter.Engine.update(engine);
+                        requestAnimationFrame(updateLoop);
+                    };
+                    updateLoop();
+
+                    return () => {
+                        window.removeEventListener("resize", handleResize);
+                        Render.stop(render);
+                        Runner.stop(runner);
+                        // 清理所有 canvas
+                        if (canvasContainerRef.current) {
+                            const existingCanvases = canvasContainerRef.current.querySelectorAll("canvas");
+                            existingCanvases.forEach((canvas) => {
+                                canvasContainerRef.current!.removeChild(canvas);
+                            });
+                        }
+                        World.clear(engine.world, false);
+                        Engine.clear(engine);
+                    };
+                }, 100);
+            };
+            initWithRetry();
         };
 
         // 延迟执行，确保容器尺寸稳定
