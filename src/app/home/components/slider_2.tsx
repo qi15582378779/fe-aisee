@@ -16,6 +16,8 @@ import "swiper/css/autoplay";
 import "swiper/css/grid";
 import "swiper/css/effect-creative";
 
+import { TriggerType } from "@/components/ui/FallingText";
+
 const customText = "Add Schema.org, AI-Ready Text, Fix Meta Data, Optimize Content";
 const customSpanStyles = [
     { backgroundColor: "#D3F6A9", color: "#1C2128", padding: "15px 32px", borderRadius: "100px" },
@@ -29,6 +31,7 @@ export default function Slider2() {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const swiperRef = useRef<SwiperRef>(null);
     const fallingTextTriggerRef = useRef<(() => void) | null>(null);
+    const [triggerType, setTriggerType] = useState<TriggerType>("manual");
 
     const [isMobile, setIsMobile] = useState(false);
 
@@ -52,17 +55,23 @@ export default function Slider2() {
             name: "Recommend",
             text: "Based on your AEO score, AIsee generates a tailored list of improvements. It identifies missing fields, suggests rewrites for better AI understanding, and offers prompt-ready content tailored for ChatGPT, Claude, and similar engines.",
             content: (
-                <FallingText
-                    text={customText}
-                    separator=","
-                    spanStyles={customSpanStyles}
-                    trigger="manual"
-                    gravity={0.8}
-                    fontSize="16px"
-                    onRef={(trigger) => {
-                        fallingTextTriggerRef.current = trigger;
-                    }}
-                />
+                <>
+                    {!isMobile ? (
+                        <FallingText
+                            text={customText}
+                            separator=","
+                            spanStyles={customSpanStyles}
+                            trigger={"manual"}
+                            gravity={0.8}
+                            fontSize="16px"
+                            onRef={(trigger) => {
+                                fallingTextTriggerRef.current = trigger;
+                            }}
+                        />
+                    ) : (
+                        <FallingText text={customText} separator="," spanStyles={customSpanStyles} trigger={"auto"} gravity={0.8} fontSize="16px" />
+                    )}
+                </>
             )
         },
         {
@@ -156,9 +165,14 @@ export default function Slider2() {
 
     useEffect(() => {
         const _isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+
+        console.log("_isMobile", _isMobile);
         setIsMobile(_isMobile);
         if (_isMobile) {
-            fallingTextTriggerRef.current?.();
+            setTriggerType("auto");
+            setTimeout(() => {
+                fallingTextTriggerRef.current?.();
+            }, 100);
         }
         return () => {
             cleanup();

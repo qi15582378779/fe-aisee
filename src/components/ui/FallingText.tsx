@@ -3,10 +3,12 @@
 import { useRef, useState, useEffect, useLayoutEffect } from "react";
 import Matter from "matter-js";
 
+export type TriggerType = "manual" | "auto" | "scroll" | "click" | "hover";
+
 interface FallingTextProps {
     text?: string;
     highlightWords?: string[];
-    trigger?: "auto" | "scroll" | "click" | "hover" | "manual";
+    trigger?: TriggerType;
     backgroundColor?: string;
     wireframes?: boolean;
     gravity?: number;
