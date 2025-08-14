@@ -47,7 +47,7 @@ export default function Slider2() {
             content: (
                 <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
                     <video src="/images/slider_2/001.mp4" className="max-w-[60%] object-cover rounded-[12px]" autoPlay muted loop />
-                    <Image src="/images/slider_2/line.svg" alt="002" className="max-w-[60%] object-cover mt-[-1%]" width={428} height={5.6} priority />
+                    <Image src="/images/slider_2/line.svg" alt="002" className="max-w-[60%] object-cover mt-[-1%] relative z-2" width={428} height={5.6} priority />
                 </div>
             )
         },
