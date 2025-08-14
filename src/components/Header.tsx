@@ -10,7 +10,12 @@ export default function Header() {
                 <Image alt="Logo" className="w-[80px] h-[24px]" src="/images/aisee.svg" width={80} height={24} />
             </div>
 
-            <button className="btn-59 cursor-pointer relative">
+            <button
+                className="btn-59 cursor-pointer relative"
+                onClick={() => {
+                    window.open("https://docs.google.com/forms/d/e/1FAIpQLScj3PnIDoKl1_5aG9BdnkZtKY1XU_6W2-pe7l1pczH6m-urwA/viewform?usp=dialog", "_blank");
+                }}
+            >
                 <span className="border-solid border-[#111111] border px-4 py-2.5 rounded-[9999px] text-[16px] leading-[150%] uppercase text-[#111111] max-md:text-[14px]">Get Started</span>
             </button>
         </header>
